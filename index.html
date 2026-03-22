@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dirless — Linux Identity from AWS IAM Identity Center</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #1c2330;
+      --border:    #30363d;
+      --accent:    #58a6ff;
+      --accent2:   #3fb950;
+      --muted:     #8b949e;
+      --text:      #e6edf3;
+      --text-dim:  #c9d1d9;
+      --danger:    #f85149;
+      --warn:      #d29922;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13,17,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { color: var(--text-dim); font-size: 0.9rem; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #0d1117 !important;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .nav-cta:hover { opacity: 0.85; text-decoration: none !important; }
+
+    .nav-cta-signup { display: flex; flex-direction: column; align-items: center; line-height: 1; padding: 0.35rem 1rem 0.4rem; }
+    .nav-cta-signup .cta-main { font-size: 0.9rem; font-weight: 600; }
+    .nav-cta-signup .cta-sub  { font-size: 0.65rem; font-weight: 400; opacity: 0.75; margin-top: 2px; white-space: nowrap; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 100px 2rem 80px;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(88,166,255,0.12);
+      border: 1px solid rgba(88,166,255,0.3);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent) 0%, #a371f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.85; text-decoration: none; }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-dim);
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--text-dim); color: var(--text); text-decoration: none; }
+
+    /* ── CODE SNIPPET ── */
+    .hero-code {
+      margin: 3.5rem auto 0;
+      max-width: 560px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: left;
+    }
+    .hero-code-bar {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 1rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #f85149; }
+    .dot-y { background: #d29922; }
+    .dot-g { background: #3fb950; }
+    .hero-code pre {
+      padding: 1.25rem 1.5rem;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+    .c-comment { color: var(--muted); }
+    .c-cmd     { color: var(--accent2); }
+    .c-flag    { color: var(--accent); }
+    .c-val     { color: #d2a8ff; }
+    .c-out     { color: var(--text-dim); }
+
+    /* ── SECTION WRAPPER ── */
+    section { padding: 80px 2rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      max-width: 620px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    /* ── PROBLEM ── */
+    .problem { background: var(--surface); }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .problem-grid { grid-template-columns: 1fr; }
+    }
+
+    .problem-list { list-style: none; display: flex; flex-direction: column; gap: 1.25rem; }
+    .problem-list li {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .problem-icon {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(248,81,73,0.15);
+      border: 1px solid rgba(248,81,73,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+    .problem-list li strong { display: block; margin-bottom: 0.2rem; color: var(--text); }
+    .problem-list li p { color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+
+    .arch-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.8rem;
+      line-height: 1.9;
+      color: var(--text-dim);
+    }
+    .arch-box .arch-label { color: var(--muted); margin-bottom: 0.5rem; font-size: 0.75rem; }
+    .arch-bad { color: var(--danger); }
+    .arch-good { color: var(--accent2); }
+    .arch-arrow { color: var(--muted); }
+
+    /* ── HOW IT WORKS ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      counter-reset: step;
+    }
+
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      position: relative;
+    }
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: rgba(88,166,255,0.1);
+      line-height: 1;
+    }
+    .step-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .step p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── FEATURES ── */
+    .features { background: var(--surface); }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .feature-card:hover { border-color: var(--accent); }
+
+    .feature-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .feature-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── MODELS ── */
+    .models-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 640px) {
+      .models-grid { grid-template-columns: 1fr; }
+    }
+
+    .model-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+    .model-card.featured {
+      border-color: var(--accent);
+      background: rgba(88,166,255,0.04);
+    }
+    .model-badge {
+      display: inline-block;
+      background: rgba(88,166,255,0.15);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    .model-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .model-card p { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1.25rem; line-height: 1.6; }
+    .model-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .model-card ul li {
+      font-size: 0.88rem;
+      color: var(--muted);
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+    }
+    .model-card ul li::before {
+      content: "✓";
+      color: var(--accent2);
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    /* ── FAQ ── */
+    .faq-list { display: flex; flex-direction: column; gap: 1rem; max-width: 780px; }
+    details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+    }
+    details[open] { border-color: rgba(88,166,255,0.4); }
+    summary {
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      font-size: 1.25rem;
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    details[open] summary::after { content: "−"; }
+    details p {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .cta-section h2 { margin-bottom: 1rem; }
+    .cta-section p { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-logo { font-weight: 700; font-size: 0.95rem; color: var(--text-dim); }
+    .footer-logo span { color: var(--accent); }
+    footer p { font-size: 0.82rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.82rem; color: var(--muted); }
+    .footer-links a:hover { color: var(--text-dim); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">dir<span>less</span></span>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#models">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://github.com/dirless" class="nav-cta">GitHub →</a>
+    <a href="https://management.dirless.com/portal/register" class="nav-cta nav-cta-signup" style="background:var(--accent2);margin-left:0.5rem;">
+      <span class="cta-main">Sign up →</span>
+      <span class="cta-sub">Free forever for up to 5 users</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">AWS IAM Identity Center → Linux</div>
+  <h1>Bring your AWS users<br>to Linux, <em>LDAP free.</em></h1>
+  <p>
+    Dirless maps your cloud users to native Linux identities — no LDAP,
+    no FreeIPA, no extra infrastructure. Add someone in Identity Center
+    and they show up on every host.
+  </p>
+  <div class="hero-actions">
+    <a href="#how-it-works" class="btn-primary">See how it works</a>
+    <a href="https://github.com/dirless" class="btn-secondary">View on GitHub</a>
+  </div>
+
+  <div class="hero-code">
+    <div class="hero-code-bar">
+      <span class="dot dot-r"></span>
+      <span class="dot dot-y"></span>
+      <span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">Enroll a node in 30 seconds</span>
+    </div>
+    <pre><span class="c-comment"># one-time enrollment per host</span>
+<span class="c-cmd">dirless-cli enroll</span> \
+  <span class="c-flag">--server</span> <span class="c-val">https://acme.dirless.com</span> \
+  <span class="c-flag">--token</span>  <span class="c-val">$ENROLLMENT_TOKEN</span>
+
+<span class="c-comment"># then just use your cloud users</span>
+<span class="c-cmd">getent passwd</span> <span class="c-val">alice</span>
+<span class="c-out">alice:x:40001:40000::/home/alice:/bin/bash</span>
+
+<span class="c-cmd">ssh</span> <span class="c-val">alice@prod-server-01</span>  <span class="c-comment"># it just works</span></pre>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="section-inner">
+    <div class="problem-grid">
+      <div>
+        <div class="section-label">The Problem</div>
+        <h2>Your cloud identity<br>and your servers<br>don't speak.</h2>
+        <p class="section-desc">
+          Modern teams manage users in AWS IAM Identity Center. But Linux servers
+          have no idea those users exist. The traditional fix is painful.
+        </p>
+        <ul class="problem-list">
+          <li>
+            <div class="problem-icon">🏗</div>
+            <div>
+              <strong>A second system to maintain</strong>
+              <p>FreeIPA or a fake LDAP server — with its own servers, replication, and failure modes.</p>
+            </div>
+          </li>
+          <li>
+            <div class="problem-icon">✏️</div>
+            <div>
+              <strong>Double the identity management</strong>
+              <p>Add someone in Identity Center, then add them again in LDAP. Remove them, hope you remembered everywhere.</p>
+            </div>
+          </li>
+          <li>
+            <div class="problem-icon">💥</div>
+            <div>
+              <strong>A fragile critical path</strong>
+              <p>If your LDAP server is down, nobody can log in anywhere. A directory outage becomes a fleet-wide lockout.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="arch-box">
+          <div class="arch-label">Before Dirless</div>
+          <div><span class="arch-bad">AWS Identity Center</span></div>
+          <div><span class="arch-arrow">    │  manual sync</span></div>
+          <div><span class="arch-bad">FreeIPA / GLAuth</span>  &larr; single point of failure</div>
+          <div><span class="arch-arrow">    │  network call per lookup</span></div>
+          <div><span class="arch-bad">SSSD on every host</span></div>
+          <div><span class="arch-arrow">    │  + sssd.conf per host</span></div>
+          <div><span class="arch-bad">Linux NSS</span></div>
+          <br/>
+          <div class="arch-label">With Dirless</div>
+          <div><span class="arch-good">AWS Identity Center</span></div>
+          <div><span class="arch-arrow">    │  syncer (in your account)</span></div>
+          <div><span class="arch-good">Dirless Backend</span>  ← hosted or self-hosted</div>
+          <div><span class="arch-arrow">    │  agent pulls snapshot</span></div>
+          <div><span class="arch-good">Local SQLite on each host</span></div>
+          <div><span class="arch-arrow">    │  no network at lookup time</span></div>
+          <div><span class="arch-good">Linux NSS</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="section-inner">
+    <div class="section-label">How it works</div>
+    <h2>Four components.<br>Zero extra servers.</h2>
+    <p class="section-desc">
+      Dirless is purpose-built for simplicity. Each piece does one thing well,
+      and the whole system runs on your existing infrastructure.
+    </p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">🔄</div>
+        <h3>Syncer</h3>
+        <p>
+          Runs on an EC2 instance inside your AWS account.
+          Pulls users, groups, and memberships from IAM Identity Center
+          using the EC2 instance role — no static credentials ever stored.
+          Pushes snapshots to the backend over mTLS.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🗄</div>
+        <h3>Backend</h3>
+        <p>
+          Receives identity snapshots and stores them as the canonical copy.
+          Serves agents on demand. Powers the management plane.
+          Hosted on our 3-node global cluster, or self-hosted by you.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🖥</div>
+        <h3>Agent</h3>
+        <p>
+          Runs on every Linux host. Polls the backend and writes a fresh
+          identity snapshot to a local SQLite file. If the backend is
+          unreachable, the last snapshot keeps NSS working — no lockout.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🔌</div>
+        <h3>NSS module</h3>
+        <p>
+          A small shared library that hooks into <code>getpwnam</code>,
+          <code>getgrnam</code>, and friends. Reads from local SQLite only —
+          zero network calls at lookup time. Works on any Linux distro.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-inner">
+    <div class="section-label">Features</div>
+    <h2>What Dirless gives you.</h2>
+    <p class="section-desc">
+      More than just user resolution — a complete identity foundation for your Linux fleet.
+    </p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(88,166,255,0.12)">🔢</div>
+        <h3>Consistent UIDs and GIDs</h3>
+        <p>
+          Every user and group gets a stable UID/GID that is identical across your entire fleet.
+          Shared filesystems like EFS and NFS work correctly because alice is always UID 40001 — everywhere.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(63,185,80,0.12)">🚪</div>
+        <h3>Automatic offboarding</h3>
+        <p>
+          Remove a user from IAM Identity Center and they are gone from every host on the next sync.
+          No manual cleanup, no stale accounts, no forgotten servers.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(210,169,34,0.12)">🛡</div>
+        <h3>Resilient by default</h3>
+        <p>
+          NSS lookups read the local SQLite database — no network call at query time.
+          A backend outage or network disruption does not lock users out of their hosts.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(167,113,247,0.12)">🔍</div>
+        <h3>Real names in audit logs</h3>
+        <p>
+          <code>ls -la</code>, <code>ps aux</code>, audit logs — they all show real usernames,
+          not raw UIDs. Your forensics team will thank you.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(88,166,255,0.12)">☁️</div>
+        <h3>SSM sessions as yourself</h3>
+        <p>
+          AWS Systems Manager can run sessions as the connecting Identity Center user
+          instead of the generic <code>ssm-user</code> — but only if that user exists in the OS.
+          Dirless makes that happen automatically.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(63,185,80,0.12)">🔐</div>
+        <h3>End-to-end encrypted snapshots</h3>
+        <p>
+          Identity snapshots are encrypted with age before leaving the backend.
+          The private key lives only on your host. Even if the backend is compromised,
+          your identity data stays private.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPLOYMENT MODELS -->
+<section id="models">
+  <div class="section-inner">
+    <div class="section-label">Deployment</div>
+    <h2>Hosted or self-hosted.<br>Your choice.</h2>
+    <p class="section-desc">
+      Dirless is designed to work either way. The protocol is identical
+      — you can start hosted and migrate later.
+    </p>
+    <div class="models-grid">
+      <div class="model-card featured">
+        <div class="model-badge">Recommended</div>
+        <h3>Hosted</h3>
+        <p>
+          We run the backend on our global 3-node cluster (US East, US East, EU West).
+          You install the syncer and agent — we handle everything else.
+        </p>
+        <ul>
+          <li>No backend infrastructure to manage</li>
+          <li>High availability out of the box</li>
+          <li>Automatic TLS via wildcard cert</li>
+          <li>One enrollment command per host</li>
+          <li>Your data encrypted at rest (age)</li>
+        </ul>
+      </div>
+      <div class="model-card">
+        <h3>Self-hosted</h3>
+        <p>
+          Run the backend binary yourself, anywhere. Single node or multi-node.
+          Full control over your infrastructure, your data, your tokens.
+        </p>
+        <ul>
+          <li>Static binary, single config file</li>
+          <li>Works on any Linux server</li>
+          <li>Air-gapped deployments supported</li>
+          <li>Agents work on any cloud or on-prem</li>
+          <li>Full protocol compatibility</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--surface)">
+  <div class="section-inner">
+    <div class="section-label">FAQ</div>
+    <h2>Common questions.</h2>
+    <div class="faq-list">
+      <details>
+        <summary>Do my Linux nodes need to be on AWS?</summary>
+        <p>
+          No. The agent has no AWS dependency — it only needs network access to the Dirless backend over HTTPS.
+          Agents run on any Linux host: on-premises, other cloud providers, bare metal, or VMs anywhere.
+          Only the syncer needs to run on an EC2 instance (to access the instance role for IAM credentials).
+        </p>
+      </details>
+      <details>
+        <summary>What happens if the backend goes down?</summary>
+        <p>
+          Nothing bad. The agent maintains a local SQLite database on each host. NSS lookups read from it
+          directly — no network call at query time. If the backend is unreachable, the last-known-good
+          snapshot stays on disk and identity resolution continues working normally. Users already on the
+          host stay logged in; new lookups still resolve. The only thing that stops during an outage is
+          pulling fresh changes from Identity Center.
+        </p>
+      </details>
+      <details>
+        <summary>Do I need to run anything special for SSH access?</summary>
+        <p>
+          Dirless handles the identity layer — making users exist in the OS — which is the prerequisite
+          for SSH key authentication and other tools. You still configure SSH authorization as you normally
+          would (e.g. <code>authorized_keys</code>, a PAM module, or an <code>AuthorizedKeysCommand</code>).
+          An SSH authorized-keys helper is on the roadmap as a natural extension, since Dirless already
+          knows which IAM user maps to which Linux user.
+        </p>
+      </details>
+      <details>
+        <summary>How are UIDs and GIDs assigned?</summary>
+        <p>
+          The backend assigns UIDs and GIDs deterministically and stably — once assigned, they never change,
+          even if the user is removed and re-added. This is critical for shared filesystems where file
+          ownership is stored numerically. You never end up with a UID recycled to a different user.
+        </p>
+      </details>
+      <details>
+        <summary>Can I run my own backend?</summary>
+        <p>
+          Yes. Dirless is fully self-hostable. The backend is a single static binary with a TOML config file.
+          Point your syncer and agents at your own URL. The protocol between all components is identical
+          regardless of who operates the backend. Customers who need full control over their infrastructure
+          or air-gapped deployments use this path.
+        </p>
+      </details>
+      <details>
+        <summary>Is my identity data visible to Dirless (hosted)?</summary>
+        <p>
+          Not in readable form. At enrollment time, the agent generates an age keypair and sends only the
+          public key to the backend. The backend encrypts every snapshot before storing or serving it.
+          The private key lives only on your host — we never see it. Even if our backend were compromised,
+          an attacker would only find encrypted blobs they cannot decrypt.
+        </p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-inner">
+    <h2>Ready to ditch LDAP?</h2>
+    <p>Enroll your first node in under a minute. No infrastructure changes required.</p>
+    <div class="hero-actions">
+      <a href="https://management.dirless.com/portal/register" class="btn-primary">Create a free account →</a>
+      <a href="mailto:hello@dirless.com" class="btn-secondary">Talk to us</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">dir<span>less</span></span>
+  <p>Linux identity from AWS IAM Identity Center — without the complexity.</p>
+  <div class="footer-links">
+    <a href="https://github.com/dirless">GitHub</a>
+    <a href="mailto:hello@dirless.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
