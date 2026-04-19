@@ -1,0 +1,5 @@
+[dirless-cli]
+name=Dirless CLI
+baseurl=https://dirless.com/rpm/$basearch
+enabled=1
+gpgcheck=0
