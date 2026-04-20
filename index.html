@@ -337,26 +337,33 @@
     .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
     .feature-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
 
-    /* ── MODELS ── */
-    .models-grid {
+    /* ── PRICING ── */
+    .pricing-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      align-items: start;
     }
-    @media (max-width: 640px) {
-      .models-grid { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 540px) {
+      .pricing-grid { grid-template-columns: 1fr; }
     }
 
-    .model-card {
+    .pricing-card {
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 2rem;
+      padding: 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
     }
-    .model-card.featured {
+    .pricing-card.featured {
       border-color: var(--accent);
       background: rgba(88,166,255,0.04);
     }
-    .model-badge {
+    .pricing-badge {
       display: inline-block;
       background: rgba(88,166,255,0.15);
       color: var(--accent);
@@ -366,23 +373,50 @@
       text-transform: uppercase;
       padding: 0.2rem 0.6rem;
       border-radius: 4px;
-      margin-bottom: 1rem;
+      align-self: flex-start;
     }
-    .model-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; }
-    .model-card p { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1.25rem; line-height: 1.6; }
-    .model-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-    .model-card ul li {
-      font-size: 0.88rem;
+    .pricing-card h3 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+    .pricing-price { display: flex; align-items: baseline; gap: 0.25rem; }
+    .pricing-price .amount { font-size: 2.2rem; font-weight: 800; color: var(--text); }
+    .pricing-price .period { font-size: 0.85rem; color: var(--muted); }
+    .pricing-limit { font-size: 0.82rem; color: var(--accent2); font-weight: 600; }
+    .pricing-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.55; margin: 0; }
+    .pricing-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin: 0; padding: 0; }
+    .pricing-card ul li {
+      font-size: 0.85rem;
       color: var(--muted);
       display: flex;
       gap: 0.6rem;
       align-items: flex-start;
     }
-    .model-card ul li::before {
+    .pricing-card ul li::before {
       content: "✓";
       color: var(--accent2);
       flex-shrink: 0;
       font-weight: 700;
+    }
+    .pricing-cta {
+      display: block;
+      text-align: center;
+      padding: 0.55rem 1rem;
+      border-radius: 7px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: transparent;
+      text-decoration: none !important;
+      transition: border-color 0.15s, background 0.15s;
+      margin-top: auto;
+    }
+    .pricing-cta:hover { border-color: var(--accent); background: rgba(88,166,255,0.07); }
+    .pricing-cta.primary { background: var(--accent2); color: #0d1117 !important; border-color: transparent; }
+    .pricing-cta.primary:hover { opacity: 0.88; background: var(--accent2); }
+    .pricing-note {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
     }
 
     /* ── FAQ ── */
@@ -680,46 +714,91 @@
   </div>
 </section>
 
-<!-- DEPLOYMENT MODELS -->
+<!-- PRICING -->
 <section id="models">
   <div class="section-inner">
-    <div class="section-label">Deployment</div>
-    <h2>Hosted or self-hosted.<br>Your choice.</h2>
+    <div class="section-label">Pricing</div>
+    <h2>Simple, server-based pricing.</h2>
     <p class="section-desc">
-      Dirless is designed to work either way. The protocol is identical
-      — you can start hosted and migrate later.
+      No per-user fees that scale with your headcount. Pay for the servers you enroll, nothing more.
+      All plans include the full feature set — hosted on our global 3-node cluster.
     </p>
-    <div class="models-grid">
-      <div class="model-card featured">
-        <div class="model-badge">Recommended</div>
-        <h3>Hosted</h3>
-        <p>
-          We run the backend on our global 3-node cluster (US East, US East, EU West).
-          You install the syncer and agent — we handle everything else.
-        </p>
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <div>
+          <div class="pricing-badge">Beta</div>
+          <h3 style="margin-top:0.5rem;">Free</h3>
+        </div>
+        <div class="pricing-price">
+          <span class="amount">$0</span>
+          <span class="period">/ mo</span>
+        </div>
+        <div class="pricing-limit">Up to 100 servers</div>
+        <p class="pricing-desc">Full access during our beta period. No time limit — we'll give 60 days notice before transitioning to paid.</p>
         <ul>
-          <li>No backend infrastructure to manage</li>
-          <li>High availability out of the box</li>
-          <li>Automatic TLS via wildcard cert</li>
-          <li>One enrollment command per host</li>
-          <li>Your data encrypted at rest (age)</li>
+          <li>All features included</li>
+          <li>Up to 100 enrolled servers</li>
+          <li>Best-effort support</li>
+          <li>Founding customer pricing at GA</li>
         </ul>
+        <a href="https://management.dirless.com/portal/register" class="pricing-cta primary">Join the beta</a>
       </div>
-      <div class="model-card">
-        <h3>Self-hosted</h3>
-        <p>
-          Run the backend binary yourself, anywhere. Single node or multi-node.
-          Full control over your infrastructure, your data, your tokens.
-        </p>
+
+      <div class="pricing-card">
+        <h3>Starter</h3>
+        <div class="pricing-price">
+          <span class="amount">$49</span>
+          <span class="period">/ mo</span>
+        </div>
+        <div class="pricing-limit">Up to 10 servers</div>
+        <p class="pricing-desc">For small teams and early-stage companies getting off the ground with AWS Identity Center.</p>
         <ul>
-          <li>Static binary, single config file</li>
-          <li>Works on any Linux server</li>
-          <li>Air-gapped deployments supported</li>
-          <li>Agents work on any cloud or on-prem</li>
-          <li>Full protocol compatibility</li>
+          <li>All features included</li>
+          <li>Up to 10 enrolled servers</li>
+          <li>Email support</li>
+          <li>3-node HA backend</li>
         </ul>
+        <a href="https://management.dirless.com/portal/register" class="pricing-cta">Get started</a>
       </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most popular</div>
+        <h3 style="margin-top:0.5rem;">Growth</h3>
+        <div class="pricing-price">
+          <span class="amount">$199</span>
+          <span class="period">/ mo</span>
+        </div>
+        <div class="pricing-limit">Up to 50 servers</div>
+        <p class="pricing-desc">For growing teams who need more capacity without worrying about per-user costs piling up.</p>
+        <ul>
+          <li>All features included</li>
+          <li>Up to 50 enrolled servers</li>
+          <li>Priority email support</li>
+          <li>3-node HA backend</li>
+        </ul>
+        <a href="https://management.dirless.com/portal/register" class="pricing-cta primary">Get started</a>
+      </div>
+
+      <div class="pricing-card">
+        <h3>Scale</h3>
+        <div class="pricing-price">
+          <span class="amount">$499</span>
+          <span class="period">/ mo</span>
+        </div>
+        <div class="pricing-limit">Up to 200 servers</div>
+        <p class="pricing-desc">For larger fleets. Fixed cost regardless of how many users are in your Identity Center.</p>
+        <ul>
+          <li>All features included</li>
+          <li>Up to 200 enrolled servers</li>
+          <li>Priority email support</li>
+          <li>3-node HA backend</li>
+        </ul>
+        <a href="https://management.dirless.com/portal/register" class="pricing-cta">Get started</a>
+      </div>
+
     </div>
+    <p class="pricing-note">Need more than 200 servers? <a href="mailto:hello@dirless.com">Contact us</a> for Enterprise pricing.</p>
   </div>
 </section>
 
