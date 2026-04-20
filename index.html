@@ -258,20 +258,61 @@
     .problem-list li strong { display: block; margin-bottom: 0.2rem; color: var(--text); }
     .problem-list li p { color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
 
-    .arch-box {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.5rem;
-      font-family: "SFMono-Regular", Consolas, monospace;
-      font-size: 0.8rem;
-      line-height: 1.9;
-      color: var(--text-dim);
+    /* ── BEFORE/AFTER DIAGRAM ── */
+    .arch-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
     }
-    .arch-box .arch-label { color: var(--muted); margin-bottom: 0.5rem; font-size: 0.75rem; }
-    .arch-bad { color: var(--danger); }
-    .arch-good { color: var(--accent2); }
-    .arch-arrow { color: var(--muted); }
+    @media (max-width: 640px) {
+      .arch-compare { grid-template-columns: 1fr; }
+    }
+    .arch-col {
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .arch-col.bad  { border: 1px solid rgba(248,81,73,0.3);  background: rgba(248,81,73,0.04); }
+    .arch-col.good { border: 1px solid rgba(63,185,80,0.3);  background: rgba(63,185,80,0.04); }
+    .arch-col-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .arch-col.bad  .arch-col-label { color: var(--danger); }
+    .arch-col.good .arch-col-label { color: var(--accent2); }
+    .arch-node {
+      border-radius: 8px;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .arch-col.bad  .arch-node { background: rgba(248,81,73,0.12); color: #f85149; border: 1px solid rgba(248,81,73,0.25); }
+    .arch-col.good .arch-node { background: rgba(63,185,80,0.12);  color: #3fb950; border: 1px solid rgba(63,185,80,0.25); }
+    .arch-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 0.72rem;
+      padding: 0.2rem 0;
+    }
+    .arch-connector span { line-height: 1; }
+    .arch-connector .arch-line { font-size: 1rem; opacity: 0.4; }
+    .arch-note {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.4rem;
+      font-style: italic;
+    }
 
     /* ── HOW IT WORKS ── */
     .steps {
@@ -592,24 +633,54 @@
         </ul>
       </div>
       <div>
-        <div class="arch-box">
-          <div class="arch-label">Before Dirless</div>
-          <div><span class="arch-bad">AWS Identity Center</span></div>
-          <div><span class="arch-arrow">    │  manual sync</span></div>
-          <div><span class="arch-bad">FreeIPA / GLAuth</span>  &larr; single point of failure</div>
-          <div><span class="arch-arrow">    │  network call per lookup</span></div>
-          <div><span class="arch-bad">SSSD on every host</span></div>
-          <div><span class="arch-arrow">    │  + sssd.conf per host</span></div>
-          <div><span class="arch-bad">Linux NSS</span></div>
-          <br/>
-          <div class="arch-label">With Dirless</div>
-          <div><span class="arch-good">AWS Identity Center</span></div>
-          <div><span class="arch-arrow">    │  syncer (in your account)</span></div>
-          <div><span class="arch-good">Dirless Backend</span>  ← hosted or self-hosted</div>
-          <div><span class="arch-arrow">    │  agent pulls snapshot</span></div>
-          <div><span class="arch-good">Local SQLite on each host</span></div>
-          <div><span class="arch-arrow">    │  no network at lookup time</span></div>
-          <div><span class="arch-good">Linux NSS</span></div>
+        <div class="arch-compare">
+
+          <div class="arch-col bad">
+            <div class="arch-col-label">Before Dirless</div>
+            <div class="arch-node">AWS Identity Center</div>
+            <div class="arch-connector">
+              <span class="arch-line">│</span>
+              <span>manual sync</span>
+              <span class="arch-line">│</span>
+            </div>
+            <div class="arch-node">FreeIPA / GLAuth</div>
+            <div class="arch-note">⚠ single point of failure</div>
+            <div class="arch-connector">
+              <span class="arch-line">│</span>
+              <span>network call per lookup</span>
+              <span class="arch-line">│</span>
+            </div>
+            <div class="arch-node">SSSD on every host</div>
+            <div class="arch-note">+ sssd.conf per host</div>
+            <div class="arch-connector">
+              <span class="arch-line">│</span>
+            </div>
+            <div class="arch-node">Linux NSS</div>
+          </div>
+
+          <div class="arch-col good">
+            <div class="arch-col-label">With Dirless</div>
+            <div class="arch-node">AWS Identity Center</div>
+            <div class="arch-connector">
+              <span class="arch-line">│</span>
+              <span>syncer (in your account)</span>
+              <span class="arch-line">│</span>
+            </div>
+            <div class="arch-node">Dirless Backend</div>
+            <div class="arch-note">hosted or self-hosted</div>
+            <div class="arch-connector">
+              <span class="arch-line">│</span>
+              <span>agent pulls snapshot</span>
+              <span class="arch-line">│</span>
+            </div>
+            <div class="arch-node">Local SQLite on each host</div>
+            <div class="arch-note">✓ no network at lookup time</div>
+            <div class="arch-connector">
+              <span class="arch-line">│</span>
+            </div>
+            <div class="arch-node">Linux NSS</div>
+          </div>
+
         </div>
       </div>
     </div>
