@@ -649,18 +649,19 @@
             <div class="arch-node">AWS Identity Center</div>
             <div class="arch-connector">
               <span class="arch-line">│</span>
-              <span>syncer (in your account)</span>
+            </div>
+            <div class="arch-node">Dirless Syncer</div>
+            <div class="arch-note">one EC2 instance in your account</div>
+            <div class="arch-connector">
               <span class="arch-line">│</span>
             </div>
             <div class="arch-node">Dirless Backend</div>
             <div class="arch-note">hosted or self-hosted</div>
             <div class="arch-connector">
               <span class="arch-line">│</span>
-              <span>agent pulls snapshot</span>
-              <span class="arch-line">│</span>
             </div>
             <div class="arch-node">Dirless Agent + NSS module</div>
-            <div class="arch-note">✓ no network at lookup time</div>
+            <div class="arch-note">on every host — ✓ no network at lookup time</div>
           </div>
 
         </div>
