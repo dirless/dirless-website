@@ -360,11 +360,11 @@
     }
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 1.25rem;
       align-items: stretch;
     }
-    @media (max-width: 900px) {
+    @media (max-width: 1100px) {
       .pricing-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 540px) {
@@ -835,9 +835,25 @@
         <span class="pricing-cta" style="background:#2d333b;color:#768390;border-color:#2d333b;cursor:default;">Coming Soon</span>
       </div>
 
+      <div class="pricing-card">
+        <h3>Enterprise</h3>
+        <div class="pricing-price">
+          <span class="amount">Custom</span>
+        </div>
+        <div class="pricing-limit">Unlimited servers</div>
+        <p class="pricing-desc">For large organizations with custom requirements. Get in touch and we'll put together a plan that fits.</p>
+        <ul>
+          <li>All features included</li>
+          <li>Unlimited enrolled servers</li>
+          <li>Dedicated support</li>
+          <li>3-node HA backend</li>
+          <li>Custom SLA available</li>
+        </ul>
+        <a href="mailto:hello@dirless.com" class="pricing-cta">Contact us</a>
+      </div>
+
     </div>
     </div>
-    <p class="pricing-note">Need more than 200 servers? <a href="mailto:hello@dirless.com">Contact us</a> for Enterprise pricing.</p>
   </div>
 </section>
 
