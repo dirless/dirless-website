@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dirless — FAQ</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/dirless.png" />
+  <link rel="apple-touch-icon" href="/dirless.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #1c2330;
+      --border:    #30363d;
+      --accent:    #58a6ff;
+      --accent2:   #3fb950;
+      --muted:     #8b949e;
+      --text:      #e6edf3;
+      --text-dim:  #c9d1d9;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13,17,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo img { height: 36px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { color: var(--text-dim); font-size: 0.9rem; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-cta {
+      background: var(--accent);
+      color: #0d1117 !important;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .nav-cta:hover { opacity: 0.85; text-decoration: none !important; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; height: auto; min-height: 52px; flex-wrap: wrap; gap: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+      .nav-links { gap: 1rem; flex-wrap: wrap; }
+    }
+
+    /* ── PAGE ── */
+    .page-inner {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 2.5rem;
+      color: var(--text);
+    }
+
+    .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+
+    details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+    }
+    details[open] { border-color: rgba(88,166,255,0.4); }
+    summary {
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      font-size: 1.25rem;
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    details[open] summary::after { content: "−"; }
+    details p {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+    details p code {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1em 0.4em;
+      font-size: 0.85em;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 3rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .back-link:hover { color: var(--text-dim); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-logo img { height: 28px; width: auto; opacity: 0.7; }
+    footer p { font-size: 0.82rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.82rem; color: var(--muted); }
+    .footer-links a:hover { color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo"><img src="/dirless.png" alt="Dirless" /></a>
+  <div class="nav-links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/#features">Features</a>
+    <a href="/#models">Pricing</a>
+    <a href="https://github.com/dirless">GitHub →</a>
+    <a href="https://portal.dirless.com/register" class="nav-cta" style="background:var(--accent2);margin-left:0.5rem;">Sign up →</a>
+  </div>
+</nav>
+
+<div class="page-inner">
+  <div class="section-label">FAQ</div>
+  <h1>Common questions.</h1>
+
+  <div class="faq-list">
+    <details>
+      <summary>Do my Linux nodes need to be on AWS?</summary>
+      <p>
+        No. The agent has no AWS dependency — it only needs network access to the Dirless backend over HTTPS.
+        Agents run on any Linux host: on-premises, other cloud providers, bare metal, or VMs anywhere.
+        Only the syncer needs to run on an EC2 instance (to access the instance role for IAM credentials).
+      </p>
+    </details>
+    <details>
+      <summary>What happens if the backend goes down?</summary>
+      <p>
+        Nothing bad. The agent maintains a local SQLite database on each host. NSS lookups read from it
+        directly — no network call at query time. If the backend is unreachable, the last-known-good
+        snapshot stays on disk and identity resolution continues working normally. Users already on the
+        host stay logged in; new lookups still resolve. The only thing that stops during an outage is
+        pulling fresh changes from Identity Center.
+      </p>
+    </details>
+    <details>
+      <summary>Do I need to run anything special for SSH access?</summary>
+      <p>
+        Dirless handles the identity layer — making users exist in the OS — which is the prerequisite
+        for SSH key authentication and other tools. You still configure SSH authorization as you normally
+        would (e.g. <code>authorized_keys</code>, a PAM module, or an <code>AuthorizedKeysCommand</code>).
+        An SSH authorized-keys helper is on the roadmap as a natural extension, since Dirless already
+        knows which IAM user maps to which Linux user.
+      </p>
+    </details>
+    <details>
+      <summary>How are UIDs and GIDs assigned?</summary>
+      <p>
+        The backend assigns UIDs and GIDs deterministically and stably — once assigned, they never change,
+        even if the user is removed and re-added. This is critical for shared filesystems where file
+        ownership is stored numerically. You never end up with a UID recycled to a different user.
+      </p>
+    </details>
+    <details>
+      <summary>Can I run my own backend?</summary>
+      <p>
+        Yes. Dirless is fully self-hostable. The backend is a single static binary with a TOML config file.
+        Point your syncer and agents at your own URL. The protocol between all components is identical
+        regardless of who operates the backend. Customers who need full control over their infrastructure
+        or air-gapped deployments use this path.
+      </p>
+    </details>
+    <details>
+      <summary>Is my identity data visible to Dirless (hosted)?</summary>
+      <p>
+        Not in readable form. At enrollment time, the agent generates an age keypair and sends only the
+        public key to the backend. The backend encrypts every snapshot before storing or serving it.
+        The private key lives only on your host — we never see it. Even if our backend were compromised,
+        an attacker would only find encrypted blobs they cannot decrypt.
+      </p>
+    </details>
+  </div>
+
+  <a href="/" class="back-link">← Back to dirless.com</a>
+</div>
+
+<footer>
+  <span class="footer-logo"><img src="/dirless.png" alt="Dirless" /></span>
+  <p>Linux identity from AWS IAM Identity Center — without the complexity.</p>
+  <div class="footer-links">
+    <a href="https://github.com/dirless">GitHub</a>
+    <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>

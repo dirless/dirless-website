@@ -558,7 +558,7 @@
     <a href="#how-it-works">How it works</a>
     <a href="#features">Features</a>
     <a href="#models">Pricing</a>
-    <a href="#faq">FAQ</a>
+    <a href="/faq.html">FAQ</a>
     <a href="https://github.com/dirless" class="nav-cta nav-github">GitHub →</a>
     <a href="#models" class="nav-cta" style="background:var(--accent2);margin-left:0.5rem;">Sign up →</a>
   </div>
@@ -888,65 +888,11 @@
 
 <!-- FAQ -->
 <section id="faq" style="background:var(--surface)">
-  <div class="section-inner">
+  <div class="section-inner" style="text-align:center;">
     <div class="section-label">FAQ</div>
     <h2>Common questions.</h2>
-    <div class="faq-list">
-      <details>
-        <summary>Do my Linux nodes need to be on AWS?</summary>
-        <p>
-          No. The agent has no AWS dependency — it only needs network access to the Dirless backend over HTTPS.
-          Agents run on any Linux host: on-premises, other cloud providers, bare metal, or VMs anywhere.
-          Only the syncer needs to run on an EC2 instance (to access the instance role for IAM credentials).
-        </p>
-      </details>
-      <details>
-        <summary>What happens if the backend goes down?</summary>
-        <p>
-          Nothing bad. The agent maintains a local SQLite database on each host. NSS lookups read from it
-          directly — no network call at query time. If the backend is unreachable, the last-known-good
-          snapshot stays on disk and identity resolution continues working normally. Users already on the
-          host stay logged in; new lookups still resolve. The only thing that stops during an outage is
-          pulling fresh changes from Identity Center.
-        </p>
-      </details>
-      <details>
-        <summary>Do I need to run anything special for SSH access?</summary>
-        <p>
-          Dirless handles the identity layer — making users exist in the OS — which is the prerequisite
-          for SSH key authentication and other tools. You still configure SSH authorization as you normally
-          would (e.g. <code>authorized_keys</code>, a PAM module, or an <code>AuthorizedKeysCommand</code>).
-          An SSH authorized-keys helper is on the roadmap as a natural extension, since Dirless already
-          knows which IAM user maps to which Linux user.
-        </p>
-      </details>
-      <details>
-        <summary>How are UIDs and GIDs assigned?</summary>
-        <p>
-          The backend assigns UIDs and GIDs deterministically and stably — once assigned, they never change,
-          even if the user is removed and re-added. This is critical for shared filesystems where file
-          ownership is stored numerically. You never end up with a UID recycled to a different user.
-        </p>
-      </details>
-      <details>
-        <summary>Can I run my own backend?</summary>
-        <p>
-          Yes. Dirless is fully self-hostable. The backend is a single static binary with a TOML config file.
-          Point your syncer and agents at your own URL. The protocol between all components is identical
-          regardless of who operates the backend. Customers who need full control over their infrastructure
-          or air-gapped deployments use this path.
-        </p>
-      </details>
-      <details>
-        <summary>Is my identity data visible to Dirless (hosted)?</summary>
-        <p>
-          Not in readable form. At enrollment time, the agent generates an age keypair and sends only the
-          public key to the backend. The backend encrypts every snapshot before storing or serving it.
-          The private key lives only on your host — we never see it. Even if our backend were compromised,
-          an attacker would only find encrypted blobs they cannot decrypt.
-        </p>
-      </details>
-    </div>
+    <p style="color:var(--text-dim);margin-top:1rem;margin-bottom:2rem;">Everything you need to know about how Dirless works.</p>
+    <a href="/faq.html" class="btn-secondary" style="display:inline-block;">Read the FAQ →</a>
   </div>
 </section>
 
@@ -957,7 +903,7 @@
     <p>Enroll your first node in under a minute. No infrastructure changes required.</p>
     <div class="hero-actions">
       <a href="https://portal.dirless.com/register" class="btn-primary">Create a free account →</a>
-      <a href="mailto:hello@dirless.com" class="btn-secondary">Talk to us</a>
+      <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;" class="btn-secondary">Talk to us</a>
     </div>
   </div>
 </section>
@@ -968,7 +914,7 @@
   <p>Linux identity from AWS IAM Identity Center — without the complexity.</p>
   <div class="footer-links">
     <a href="https://github.com/dirless">GitHub</a>
-    <a href="mailto:hello@dirless.com">Contact</a>
+    <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;">Contact</a>
   </div>
 </footer>
 
