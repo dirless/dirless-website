@@ -555,7 +555,7 @@
 <nav>
   <a href="/" class="nav-logo"><img src="/dirless.png" alt="Dirless" /></a>
   <div class="nav-links">
-    <a href="#how-it-works">How it works</a>
+    <a href="/how-it-works.html">How it works</a>
     <a href="#features">Features</a>
     <a href="#models">Pricing</a>
     <a href="/faq.html">FAQ</a>
@@ -574,7 +574,7 @@
     and they show up on every host.
   </p>
   <div class="hero-actions">
-    <a href="#how-it-works" class="btn-primary">See how it works</a>
+    <a href="/how-it-works.html" class="btn-primary">See how it works</a>
     <a href="https://github.com/dirless" class="btn-secondary">View on GitHub</a>
   </div>
 
@@ -652,52 +652,14 @@
 
 <!-- HOW IT WORKS -->
 <section id="how-it-works">
-  <div class="section-inner">
+  <div class="section-inner" style="text-align:center;">
     <div class="section-label">How it works</div>
     <h2>Four components.<br>Zero extra servers.</h2>
-    <p class="section-desc">
+    <p class="section-desc" style="margin-left:auto;margin-right:auto;">
       Dirless is purpose-built for simplicity. Each piece does one thing well,
       and the whole system runs on your existing infrastructure.
     </p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-icon">🔄</div>
-        <h3>Syncer</h3>
-        <p>
-          Runs on an EC2 instance inside your AWS account.
-          Pulls users, groups, and memberships from IAM Identity Center
-          using the EC2 instance role — no static credentials ever stored.
-          Pushes snapshots to the backend over mTLS.
-        </p>
-      </div>
-      <div class="step">
-        <div class="step-icon">🗄</div>
-        <h3>Backend</h3>
-        <p>
-          Receives identity snapshots and stores them as the canonical copy.
-          Serves agents on demand. Powers the management plane.
-          Hosted on our 3-node global cluster, or self-hosted by you.
-        </p>
-      </div>
-      <div class="step">
-        <div class="step-icon">🖥</div>
-        <h3>Agent</h3>
-        <p>
-          Runs on every Linux host. Polls the backend and writes a fresh
-          identity snapshot to a local SQLite file. If the backend is
-          unreachable, the last snapshot keeps NSS working — no lockout.
-        </p>
-      </div>
-      <div class="step">
-        <div class="step-icon">🔌</div>
-        <h3>NSS module</h3>
-        <p>
-          A small shared library that hooks into <code>getpwnam</code>,
-          <code>getgrnam</code>, and friends. Reads from local SQLite only —
-          zero network calls at lookup time. Works on any Linux distro.
-        </p>
-      </div>
-    </div>
+    <a href="/how-it-works.html" class="btn-secondary" style="display:inline-block;">See how it works →</a>
   </div>
 </section>
 
