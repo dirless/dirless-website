@@ -65,7 +65,9 @@
 
     @media (max-width: 600px) {
       nav { padding: 0 1rem; height: auto; min-height: 52px; flex-wrap: wrap; gap: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
-      .nav-links { gap: 1rem; flex-wrap: wrap; }
+      .nav-links { gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+      .nav-links a { font-size: 0.78rem; }
+      .nav-cta { padding: 0.3rem 0.65rem; font-size: 0.78rem; }
     }
 
     /* ── PAGE ── */
@@ -172,7 +174,7 @@
     <a href="/#features">Features</a>
     <a href="/#models">Pricing</a>
     <a href="/faq.html">FAQ</a>
-    <a href="https://github.com/dirless" class="nav-cta">GitHub →</a>
+    <a href="https://github.com/dirless" class="nav-cta nav-github">GitHub →</a>
     <a href="https://portal.dirless.com/register" class="nav-cta" style="background:var(--accent2);margin-left:0.5rem;">Sign up →</a>
   </div>
 </nav>
