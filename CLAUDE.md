@@ -40,4 +40,12 @@ To add a new RPM package: build the `.rpm`, add it to the appropriate arch direc
 
 ## Deployment
 
-Pushing to the `main` branch deploys automatically via GitHub Pages. No build step — everything is static.
+| Branch | URL | How |
+|--------|-----|-----|
+| `main` | `https://dirless.com` | GitHub Pages auto-deploys on push |
+| `staging` | `https://staging.dirless.com` | Served from ops machine — manual pull required |
+
+**Staging update workflow:**
+1. Make changes on the `staging` branch and push
+2. Pull on the server: `ssh -i ~/.ssh/id_ed25519_github -p 39124 root@172.245.64.204 "git -C /var/www/staging.dirless.com pull"`
+3. When satisfied, merge `staging` → `main` to go live
