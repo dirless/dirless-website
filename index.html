@@ -580,9 +580,11 @@
       font-size: 0.78rem;
       color: var(--muted);
     }
-    .built-with a { color: var(--muted); text-decoration: none; }
+    .built-with a { color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; }
     .built-with a:hover { color: var(--text-dim); }
+    .built-with a:hover .bw-logo { opacity: 0.85; }
     .built-with-sep { opacity: 0.3; }
+    .bw-logo { height: 16px; width: auto; vertical-align: middle; filter: grayscale(1) opacity(0.55); transition: opacity 0.15s; }
 
     /* ── DIVIDER ── */
     .divider {
@@ -922,19 +924,19 @@
 <div class="built-with">
   <span>Built with</span>
   <span class="built-with-sep">·</span>
-  <a href="https://crystal-lang.org" target="_blank" rel="noopener">Crystal</a>
+  <a href="https://crystal-lang.org" target="_blank" rel="noopener"><img class="bw-logo" src="/img/tech/crystal.svg" alt="">Crystal</a>
   <span class="built-with-sep">·</span>
   <a href="https://github.com/dirless/age-crystal" target="_blank" rel="noopener">AGE encryption</a>
   <span class="built-with-sep">·</span>
-  <a href="https://www.sqlite.org" target="_blank" rel="noopener">SQLite</a>
+  <a href="https://www.sqlite.org" target="_blank" rel="noopener"><img class="bw-logo" src="/img/tech/sqlite.svg" alt="">SQLite</a>
   <span class="built-with-sep">·</span>
-  <a href="https://caddyserver.com" target="_blank" rel="noopener">Caddy</a>
+  <a href="https://caddyserver.com" target="_blank" rel="noopener"><img class="bw-logo" src="/img/tech/caddy-icon.png" alt="">Caddy</a>
   <span class="built-with-sep">·</span>
-  <a href="https://www.atlantic.net" target="_blank" rel="noopener">Atlantic.Net</a>
+  <a href="https://www.atlantic.net" target="_blank" rel="noopener"><img class="bw-logo" src="/img/tech/atlanticnet.ico" alt="">Atlantic.Net</a>
   <span class="built-with-sep">·</span>
-  <a href="https://www.racknerd.com" target="_blank" rel="noopener">RackNerd</a>
+  <a href="https://www.racknerd.com" target="_blank" rel="noopener"><img class="bw-logo" src="/img/tech/racknerd.ico" alt="">RackNerd</a>
   <span class="built-with-sep">·</span>
-  <a href="https://www.zoho.com/mail/" target="_blank" rel="noopener">Zoho Mail</a>
+  <a href="https://www.zoho.com/mail/" target="_blank" rel="noopener"><img class="bw-logo" src="/img/tech/zoho.svg" alt="">Zoho Mail</a>
 </div>
 
 <!-- FOOTER -->
