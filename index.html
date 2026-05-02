@@ -87,9 +87,37 @@
     /* ── HERO ── */
     .hero {
       padding: 100px 2rem 80px;
-      text-align: center;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+    }
+
+    .hero-logo {
+      flex-shrink: 0;
+    }
+
+    .hero-logo img {
+      width: 220px;
+      height: auto;
+      display: block;
+    }
+
+    .hero-content {
+      flex: 1;
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+        padding: 60px 1.5rem 50px;
+      }
+      .hero-logo img { width: 140px; margin: 0 auto; }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
     }
 
     .hero-badge {
@@ -565,18 +593,22 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge">AWS IAM Identity Center → Linux</div>
-  <h1>Bring your AWS users<br>to Linux, <em>LDAP free.</em></h1>
-  <p>
-    Dirless maps your cloud users to native Linux identities — no LDAP,
-    no FreeIPA, no extra infrastructure. Add someone in the AWS Identity Center
-    and they show up on every host.
-  </p>
-  <div class="hero-actions">
-    <a href="/how-it-works.html" class="btn-primary">See how it works</a>
-    <a href="https://github.com/dirless" class="btn-secondary">View on GitHub</a>
+  <div class="hero-logo">
+    <img src="/dirless.png" alt="Dirless" />
   </div>
-
+  <div class="hero-content">
+    <div class="hero-badge">AWS IAM Identity Center → Linux</div>
+    <h1>Bring your AWS users<br>to Linux, <em>LDAP free.</em></h1>
+    <p>
+      Dirless maps your cloud users to native Linux identities — no LDAP,
+      no FreeIPA, no extra infrastructure. Add someone in the AWS Identity Center
+      and they show up on every host.
+    </p>
+    <div class="hero-actions">
+      <a href="/how-it-works.html" class="btn-primary">See how it works</a>
+      <a href="https://github.com/dirless" class="btn-secondary">View on GitHub</a>
+    </div>
+  </div>
 </div>
 
 <!-- PROBLEM -->
