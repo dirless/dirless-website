@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dirless — How it works</title>
+  <title>Dirless - How it works</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/dirless.png" />
   <link rel="apple-touch-icon" href="/dirless.png" />
@@ -195,7 +195,7 @@
       <p>
         Runs on an EC2 instance inside your AWS account.
         Pulls users, groups, and memberships from IAM Identity Center
-        using the EC2 instance role — no static credentials ever stored.
+        using the EC2 instance role - no static credentials ever stored.
         Pushes snapshots to the backend over mTLS.
       </p>
     </div>
@@ -214,7 +214,7 @@
       <p>
         Runs on every Linux host. Polls the backend and writes a fresh
         identity snapshot to a local SQLite file. If the backend is
-        unreachable, the last snapshot keeps NSS working — no lockout.
+        unreachable, the last snapshot keeps NSS working - no lockout.
       </p>
     </div>
     <div class="step">
@@ -222,7 +222,7 @@
       <h3>NSS module</h3>
       <p>
         A small shared library that hooks into <code>getpwnam</code>,
-        <code>getgrnam</code>, and friends. Reads from local SQLite only —
+        <code>getgrnam</code>, and friends. Reads from local SQLite only -
         zero network calls at lookup time. Works on any Linux distro.
       </p>
     </div>
@@ -233,7 +233,7 @@
 
 <footer>
   <span class="footer-logo"><img src="/dirless.png" alt="Dirless" /></span>
-  <p>Linux identity from AWS IAM Identity Center — without the complexity.</p>
+  <p>Linux identity from AWS IAM Identity Center - without the complexity.</p>
   <div class="footer-links">
     <a href="https://github.com/dirless">GitHub</a>
     <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;">Contact</a>

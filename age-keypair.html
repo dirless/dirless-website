@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dirless — Generate an age keypair</title>
+  <title>Dirless - Generate an age keypair</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/dirless.png" />
   <link rel="apple-touch-icon" href="/dirless.png" />
@@ -232,18 +232,18 @@
   <h1>Generate an age keypair</h1>
   <p class="section-desc">
     Dirless uses <a href="https://age-encryption.org" target="_blank" rel="noopener">age</a> to
-    encrypt your directory snapshot end-to-end. Your private key never leaves your machine —
+    encrypt your directory snapshot end-to-end. Your private key never leaves your machine -
     decryption happens entirely in the browser. You only need to generate a keypair once.
   </p>
 
   <div class="callout">
     <strong>Keep your private key safe.</strong> Store it in a password manager or another
-    secure location. If you lose it, your encrypted directory snapshot cannot be recovered —
+    secure location. If you lose it, your encrypted directory snapshot cannot be recovered -
     you would need to re-enter all your users manually.
   </div>
 
   <div class="step-block">
-    <span class="step-number">Step 1 — Install age</span>
+    <span class="step-number">Step 1 - Install age</span>
     <h2>Install the age tool</h2>
     <p>age is available on all major platforms.</p>
     <div class="os-tabs">
@@ -269,7 +269,7 @@
   </div>
 
   <div class="step-block">
-    <span class="step-number">Step 2 — Generate</span>
+    <span class="step-number">Step 2 - Generate</span>
     <h2>Generate your keypair</h2>
     <p>Run this command in your terminal:</p>
     <pre>age-keygen -o age-key.txt</pre>
@@ -283,16 +283,16 @@ AGE-SECRET-KEY-1QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ</pre>
   </div>
 
   <div class="step-block">
-    <span class="step-number">Step 3 — Store safely</span>
+    <span class="step-number">Step 3 - Store safely</span>
     <h2>Save your keys</h2>
     <p>
-      Copy the line starting with <code>AGE-SECRET-KEY-1</code> — that is your private key.
+      Copy the line starting with <code>AGE-SECRET-KEY-1</code> - that is your private key.
       Paste it into Dirless when prompted. Store <code>age-key.txt</code> somewhere safe,
       such as a password manager (1Password, Bitwarden, KeePass, etc.).
     </p>
     <p>
       The public key (the <code>age1…</code> value on the comment line) is stored by
-      Dirless automatically when you first decrypt — you do not need to provide it separately.
+      Dirless automatically when you first decrypt - you do not need to provide it separately.
     </p>
   </div>
 
@@ -301,7 +301,7 @@ AGE-SECRET-KEY-1QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ</pre>
 
 <footer>
   <span class="footer-logo"><img src="/dirless.png" alt="Dirless" /></span>
-  <p>Linux identity from AWS IAM Identity Center — without the complexity.</p>
+  <p>Linux identity from AWS IAM Identity Center - without the complexity.</p>
   <div class="footer-links">
     <a href="https://github.com/dirless">GitHub</a>
     <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;">Contact</a>
