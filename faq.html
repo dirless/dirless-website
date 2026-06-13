@@ -71,6 +71,14 @@
           "@type": "Answer",
           "text": "Not in readable form. At enrollment time, the agent generates an age keypair and sends only the public key to the backend. The backend encrypts every snapshot before storing or serving it. The private key lives only on your host — we never see it. Even if our backend were compromised, an attacker would only find encrypted blobs they cannot decrypt."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I add users who aren't in AWS Identity Center?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. In addition to users synced from IAM Identity Center, you can add local users directly through the web portal. These users are encrypted with the same age keypair and distributed to all enrolled hosts just like cloud-sourced users. This is useful for service accounts, contractors, or anyone who needs a Linux identity but isn't in IdC."
+        }
       }
     ]
   }
@@ -268,11 +276,21 @@
       </p>
     </details>
     <details>
+      <summary>Can I add users who aren't in AWS Identity Center?</summary>
+      <p>
+        Yes. In addition to users synced from IAM Identity Center, you can add local users
+        directly through the web portal. These users are encrypted with the same age keypair
+        and distributed to all enrolled hosts just like cloud-sourced users. This is useful for
+        service accounts, contractors, or anyone who needs a Linux identity but isn't in IdC.
+      </p>
+    </details>
+    <details>
       <summary>Do I need to run anything special for SSH access?</summary>
       <p>
         Dirless handles the identity layer - making users exist in the OS - which is the prerequisite
-        for SSH key authentication and other tools. You still configure SSH authorization as you normally
-        would (e.g. <code>authorized_keys</code>, a PAM module, or an <code>AuthorizedKeysCommand</code>).
+        for SSH key authentication and other tools. This works for both cloud-sourced and locally-added
+        users. You still configure SSH authorization as you normally would
+        (e.g. <code>authorized_keys</code>, a PAM module, or an <code>AuthorizedKeysCommand</code>).
         An SSH authorized-keys helper is on the roadmap as a natural extension, since Dirless already
         knows which IAM user maps to which Linux user.
       </p>
@@ -280,9 +298,11 @@
     <details>
       <summary>How are UIDs and GIDs assigned?</summary>
       <p>
-        The backend assigns UIDs and GIDs deterministically and stably - once assigned, they never change,
-        even if the user is removed and re-added. This is critical for shared filesystems where file
-        ownership is stored numerically. You never end up with a UID recycled to a different user.
+        The backend assigns UIDs and GIDs deterministically and stably for all users - whether
+        synced from IAM Identity Center or added through the web portal. Once assigned, they
+        never change, even if the user is removed and re-added. This is critical for shared
+        filesystems where file ownership is stored numerically. You never end up with a UID
+        recycled to a different user.
       </p>
     </details>
     <details>
