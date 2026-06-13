@@ -191,7 +191,7 @@
     <details>
       <summary>What happens if the backend goes down?</summary>
       <p>
-        Nothing bad. The agent maintains a local SQLite database on each host. NSS lookups read from it
+        Nothing bad. The agent maintains a local database on each host. NSS lookups read from it
         directly - no network call at query time. If the backend is unreachable, the last-known-good
         snapshot stays on disk and identity resolution continues working normally. Users already on the
         host stay logged in; new lookups still resolve. The only thing that stops during an outage is

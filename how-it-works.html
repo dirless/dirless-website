@@ -213,7 +213,7 @@
       <h3>Agent</h3>
       <p>
         Runs on every Linux host. Polls the backend and writes a fresh
-        identity snapshot to a local SQLite file. If the backend is
+        identity snapshot to a local database. If the backend is
         unreachable, the last snapshot keeps NSS working - no lockout.
       </p>
     </div>
@@ -222,7 +222,7 @@
       <h3>NSS module</h3>
       <p>
         A small shared library that hooks into <code>getpwnam</code>,
-        <code>getgrnam</code>, and friends. Reads from local SQLite only -
+        <code>getgrnam</code>, and friends. Reads from local storage only -
         zero network calls at lookup time. Works on any Linux distro.
       </p>
     </div>

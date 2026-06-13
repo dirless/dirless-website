@@ -622,7 +622,7 @@
     <p>
       Dirless maps your cloud users to native Linux identities - no LDAP,
       no FreeIPA, no extra infrastructure. Add someone in the AWS Identity Center
-      and they show up on every host.
+      or the web portal and they show up on every host.
     </p>
     <div class="hero-actions">
       <a href="/how-it-works.html" class="btn-primary">See how it works</a>
@@ -743,7 +743,7 @@
         <div class="feature-card-icon" style="background:rgba(210,169,34,0.12)">🛡</div>
         <h3>Resilient by default</h3>
         <p>
-          NSS lookups read the local SQLite database - no network call at query time.
+          NSS lookups read the local database - no network call at query time.
           A backend outage or network disruption does not lock users out of their hosts.
         </p>
       </div>
@@ -753,6 +753,14 @@
         <p>
           <code>ls -la</code>, <code>ps aux</code>, audit logs - they all show real usernames,
           not raw UIDs. Your forensics team will thank you.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(63,185,80,0.12)">🌐</div>
+        <h3>Web management portal</h3>
+        <p>
+          Add and remove local users, monitor enrolled nodes, and manage your
+          deployment through a web dashboard - no CLI needed.
         </p>
       </div>
       <div class="feature-card">
@@ -929,7 +937,7 @@
   <span class="built-with-sep">·</span>
   <a href="https://github.com/dirless/age-crystal" target="_blank" rel="noopener">AGE encryption</a>
   <span class="built-with-sep">·</span>
-  <a href="https://www.sqlite.org" target="_blank" rel="noopener"><img class="bw-logo bw-logo-bg" src="/img/tech/sqlite.svg" alt="">SQLite</a>
+  <a href="https://github.com/dirless/trash-panda-db" target="_blank" rel="noopener">TrashPandaDB</a>
   <span class="built-with-sep">·</span>
   <a href="https://caddyserver.com" target="_blank" rel="noopener"><img class="bw-logo bw-logo-bg" src="/img/tech/caddy.svg" alt="">Caddy</a>
   <span class="built-with-sep">·</span>
