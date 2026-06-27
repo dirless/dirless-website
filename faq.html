@@ -3,10 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dirless — FAQ</title>
+  <meta name="description" content="Frequently asked questions about Dirless , offline resilience, UID/GID assignment, self-hosting, encryption, SSH access, and more." />
+  <title>Dirless - FAQ</title>
+  <link rel="canonical" href="https://dirless.com/faq.html" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/dirless.png" />
   <link rel="apple-touch-icon" href="/dirless.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dirless.com/faq.html" />
+  <meta property="og:title" content="Dirless - FAQ" />
+  <meta property="og:description" content="Frequently asked questions about Dirless , offline resilience, UID/GID assignment, self-hosting, encryption, SSH access, and more." />
+  <meta property="og:image" content="https://dirless.com/dirless.png" />
+  <meta property="og:site_name" content="Dirless" />
+
+  <!-- Structured Data: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do I need an AWS account to use Dirless?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Dirless is a full Linux identity management system that works entirely without AWS. You can add users directly through the web portal and they become native Linux identities on every enrolled server. AWS IAM Identity Center sync is an optional feature for teams who already use it, not a requirement."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do my Linux nodes need to be on AWS?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The agent has no AWS dependency , it only needs network access to the Dirless backend over HTTPS. Agents run on any Linux host: on-premises, other cloud providers, bare metal, or VMs anywhere. Only the syncer needs to run on an EC2 instance (to access the instance role for IAM credentials)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if the backend goes down?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nothing bad. The agent maintains a local database on each host. NSS lookups read from it directly , no network call at query time. If the backend is unreachable, the last-known-good snapshot stays on disk and identity resolution continues working normally. Users already on the host stay logged in; new lookups still resolve. The only thing that stops during an outage is pulling fresh changes from Identity Center."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to run anything special for SSH access?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dirless handles the identity layer , making users exist in the OS , which is the prerequisite for SSH key authentication and other tools. You still configure SSH authorization as you normally would (e.g. authorized_keys, a PAM module, or an AuthorizedKeysCommand). An SSH authorized-keys helper is on the roadmap."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How are UIDs and GIDs assigned?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The backend assigns UIDs and GIDs deterministically and stably , once assigned, they never change, even if the user is removed and re-added. This is critical for shared filesystems where file ownership is stored numerically. You never end up with a UID recycled to a different user."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I run my own backend?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Dirless is fully self-hostable. The backend is a single static binary with a TOML config file. Point your syncer and agents at your own URL. The protocol between all components is identical regardless of who operates the backend."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my identity data visible to Dirless (hosted)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not in readable form. At enrollment time, the agent generates an age keypair and sends only the public key to the backend. The backend encrypts every snapshot before storing or serving it. The private key lives only on your host , we never see it. Even if our backend were compromised, an attacker would only find encrypted blobs they cannot decrypt."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I add users who aren't in AWS Identity Center?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. In addition to users synced from IAM Identity Center, you can add local users directly through the web portal. These users are encrypted with the same age keypair and distributed to all enrolled hosts just like cloud-sourced users. This is useful for service accounts, contractors, or anyone who needs a Linux identity but isn't in IdC."
+        }
+      }
+    ]
+  }
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -181,9 +266,19 @@
 
   <div class="faq-list">
     <details>
+      <summary>Do I need an AWS account to use Dirless?</summary>
+      <p>
+        No. Dirless is a full Linux identity management system that works entirely
+        without AWS. You can add users directly through the web portal and they
+        become native Linux identities on every enrolled server. AWS IAM Identity
+        Center sync is an optional feature for teams who already use it - not a
+        requirement.
+      </p>
+    </details>
+    <details>
       <summary>Do my Linux nodes need to be on AWS?</summary>
       <p>
-        No. The agent has no AWS dependency — it only needs network access to the Dirless backend over HTTPS.
+        No. The agent has no AWS dependency - it only needs network access to the Dirless backend over HTTPS.
         Agents run on any Linux host: on-premises, other cloud providers, bare metal, or VMs anywhere.
         Only the syncer needs to run on an EC2 instance (to access the instance role for IAM credentials).
       </p>
@@ -191,19 +286,29 @@
     <details>
       <summary>What happens if the backend goes down?</summary>
       <p>
-        Nothing bad. The agent maintains a local SQLite database on each host. NSS lookups read from it
-        directly — no network call at query time. If the backend is unreachable, the last-known-good
+        Nothing bad. The agent maintains a local database on each host. NSS lookups read from it
+        directly - no network call at query time. If the backend is unreachable, the last-known-good
         snapshot stays on disk and identity resolution continues working normally. Users already on the
         host stay logged in; new lookups still resolve. The only thing that stops during an outage is
         pulling fresh changes from Identity Center.
       </p>
     </details>
     <details>
+      <summary>Can I add users who aren't in AWS Identity Center?</summary>
+      <p>
+        Yes. In addition to users synced from IAM Identity Center, you can add local users
+        directly through the web portal. These users are encrypted with the same age keypair
+        and distributed to all enrolled hosts just like cloud-sourced users. This is useful for
+        service accounts, contractors, or anyone who needs a Linux identity but isn't in IdC.
+      </p>
+    </details>
+    <details>
       <summary>Do I need to run anything special for SSH access?</summary>
       <p>
-        Dirless handles the identity layer — making users exist in the OS — which is the prerequisite
-        for SSH key authentication and other tools. You still configure SSH authorization as you normally
-        would (e.g. <code>authorized_keys</code>, a PAM module, or an <code>AuthorizedKeysCommand</code>).
+        Dirless handles the identity layer - making users exist in the OS - which is the prerequisite
+        for SSH key authentication and other tools. This works for both cloud-sourced and locally-added
+        users. You still configure SSH authorization as you normally would
+        (e.g. <code>authorized_keys</code>, a PAM module, or an <code>AuthorizedKeysCommand</code>).
         An SSH authorized-keys helper is on the roadmap as a natural extension, since Dirless already
         knows which IAM user maps to which Linux user.
       </p>
@@ -211,9 +316,11 @@
     <details>
       <summary>How are UIDs and GIDs assigned?</summary>
       <p>
-        The backend assigns UIDs and GIDs deterministically and stably — once assigned, they never change,
-        even if the user is removed and re-added. This is critical for shared filesystems where file
-        ownership is stored numerically. You never end up with a UID recycled to a different user.
+        The backend assigns UIDs and GIDs deterministically and stably for all users - whether
+        synced from IAM Identity Center or added through the web portal. Once assigned, they
+        never change, even if the user is removed and re-added. This is critical for shared
+        filesystems where file ownership is stored numerically. You never end up with a UID
+        recycled to a different user.
       </p>
     </details>
     <details>
@@ -230,7 +337,7 @@
       <p>
         Not in readable form. At enrollment time, the agent generates an age keypair and sends only the
         public key to the backend. The backend encrypts every snapshot before storing or serving it.
-        The private key lives only on your host — we never see it. Even if our backend were compromised,
+        The private key lives only on your host - we never see it. Even if our backend were compromised,
         an attacker would only find encrypted blobs they cannot decrypt.
       </p>
     </details>
@@ -241,7 +348,7 @@
 
 <footer>
   <span class="footer-logo"><img src="/dirless.png" alt="Dirless" /></span>
-  <p>Linux identity from AWS IAM Identity Center — without the complexity.</p>
+  <p>Linux identity management without LDAP, FreeIPA, or extra infrastructure.</p>
   <div class="footer-links">
     <a href="https://github.com/dirless">GitHub</a>
     <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;">Contact</a>

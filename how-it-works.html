@@ -3,10 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dirless — How it works</title>
+  <meta name="description" content="Learn how Dirless works: a backend, an agent, and an NSS module give every enrolled Linux host native user resolution. AWS IAM Identity Center sync is optional." />
+  <title>Dirless - How it works</title>
+  <link rel="canonical" href="https://dirless.com/how-it-works.html" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/dirless.png" />
   <link rel="apple-touch-icon" href="/dirless.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dirless.com/how-it-works.html" />
+  <meta property="og:title" content="How Dirless Works" />
+  <meta property="og:description" content="A backend, an agent, and an NSS module give every enrolled Linux host native user resolution. AWS IAM Identity Center sync is optional." />
+  <meta property="og:image" content="https://dirless.com/dirless.png" />
+  <meta property="og:site_name" content="Dirless" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -182,30 +193,23 @@
 
 <div class="page-inner">
   <div class="section-label">How it works</div>
-  <h1>Four components.<br>Zero extra servers.</h1>
+  <h1>Simple by design.<br>Powerful by default.</h1>
   <p class="section-desc">
-    Dirless is purpose-built for simplicity. Each piece does one thing well,
-    and the whole system runs on your existing infrastructure.
+    Dirless is a complete Linux identity management system. Three core components
+    run on your existing infrastructure. Identity sources are pluggable: use the
+    web portal, sync from AWS IAM Identity Center, or both at the same time.
   </p>
 
-  <div class="steps">
-    <div class="step">
-      <div class="step-icon">🔄</div>
-      <h3>Syncer</h3>
-      <p>
-        Runs on an EC2 instance inside your AWS account.
-        Pulls users, groups, and memberships from IAM Identity Center
-        using the EC2 instance role — no static credentials ever stored.
-        Pushes snapshots to the backend over mTLS.
-      </p>
-    </div>
+  <p style="font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent2);margin-bottom:1rem;">Core components</p>
+  <div class="steps" style="margin-bottom:3rem;">
     <div class="step">
       <div class="step-icon">🗄</div>
       <h3>Backend</h3>
       <p>
-        Receives identity snapshots and stores them as the canonical copy.
-        Serves agents on demand. Powers the management plane.
-        Hosted on our 3-node global cluster, or self-hosted by you.
+        The central store for your identity data. Receives snapshots from any
+        identity source, encrypts them with your public key, and serves them
+        to agents on demand. Hosted on our 3-node global cluster, or
+        self-hosted by you.
       </p>
     </div>
     <div class="step">
@@ -213,8 +217,9 @@
       <h3>Agent</h3>
       <p>
         Runs on every Linux host. Polls the backend and writes a fresh
-        identity snapshot to a local SQLite file. If the backend is
-        unreachable, the last snapshot keeps NSS working — no lockout.
+        identity snapshot to a local database. If the backend is
+        unreachable, the last snapshot keeps NSS working - no lockout.
+        Runs on any Linux host, anywhere.
       </p>
     </div>
     <div class="step">
@@ -222,8 +227,33 @@
       <h3>NSS module</h3>
       <p>
         A small shared library that hooks into <code>getpwnam</code>,
-        <code>getgrnam</code>, and friends. Reads from local SQLite only —
+        <code>getgrnam</code>, and friends. Reads from local storage only -
         zero network calls at lookup time. Works on any Linux distro.
+      </p>
+    </div>
+  </div>
+
+  <p style="font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent2);margin-bottom:1rem;">Identity sources (use one or both)</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-icon">🌐</div>
+      <h3>Web portal</h3>
+      <p>
+        Add users directly through the Dirless web portal. No AWS account,
+        no syncer, no external identity provider needed. Users get consistent
+        UIDs and SSH key management just like any other identity source.
+        A great starting point and useful for service accounts or contractors
+        alongside any cloud IdP.
+      </p>
+    </div>
+    <div class="step">
+      <div class="step-icon">🔄</div>
+      <h3>AWS IAM Identity Center syncer</h3>
+      <p>
+        Optional. Runs on an EC2 instance inside your AWS account.
+        Pulls users, groups, and memberships from IAM Identity Center
+        using the EC2 instance role - no static credentials ever stored.
+        Pushes snapshots to the backend automatically.
       </p>
     </div>
   </div>
@@ -233,7 +263,7 @@
 
 <footer>
   <span class="footer-logo"><img src="/dirless.png" alt="Dirless" /></span>
-  <p>Linux identity from AWS IAM Identity Center — without the complexity.</p>
+  <p>Linux identity management without LDAP, FreeIPA, or extra infrastructure.</p>
   <div class="footer-links">
     <a href="https://github.com/dirless">GitHub</a>
     <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;">Contact</a>

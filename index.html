@@ -3,10 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dirless — Linux Identity from AWS IAM Identity Center</title>
+  <meta name="description" content="Dirless gives every team member a native Linux identity on every enrolled server. Sync from AWS IAM Identity Center, manage users directly through the web portal, or both. No LDAP, no FreeIPA." />
+  <title>Dirless - Linux Identity Management without LDAP</title>
+  <link rel="canonical" href="https://dirless.com/" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/dirless.png" />
   <link rel="apple-touch-icon" href="/dirless.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dirless.com/" />
+  <meta property="og:title" content="Dirless - Linux Identity Management without LDAP" />
+  <meta property="og:description" content="Give every team member a native Linux identity on every enrolled server. Sync from AWS IAM Identity Center, manage users through the web portal, or both. No LDAP, no FreeIPA." />
+  <meta property="og:image" content="https://dirless.com/dirless.png" />
+  <meta property="og:site_name" content="Dirless" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Dirless",
+    "url": "https://dirless.com",
+    "description": "Give every team member a native Linux identity on every enrolled server. Sync from AWS IAM Identity Center, manage users through the web portal, or both. No LDAP, no FreeIPA.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux",
+    "offers": [
+      {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free plan - up to 10 servers"
+      },
+      {
+        "@type": "Offer",
+        "price": "5",
+        "priceCurrency": "USD",
+        "description": "Growth plan - up to 50 servers"
+      },
+      {
+        "@type": "Offer",
+        "price": "15",
+        "priceCurrency": "USD",
+        "description": "Scale plan - up to 200 servers"
+      }
+    ]
+  }
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -430,7 +474,7 @@
     }
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 1.25rem;
       align-items: stretch;
     }
@@ -617,12 +661,12 @@
     <img src="/dirless.png" alt="Dirless" />
   </div>
   <div class="hero-content">
-    <div class="hero-badge">AWS IAM Identity Center → Linux</div>
-    <h1>Bring your AWS users<br>to Linux, <em>LDAP free.</em></h1>
+    <div class="hero-badge">Linux Identity Management</div>
+    <h1>Linux identity management,<br><em>LDAP free.</em></h1>
     <p>
-      Dirless maps your cloud users to native Linux identities — no LDAP,
-      no FreeIPA, no extra infrastructure. Add someone in the AWS Identity Center
-      and they show up on every host.
+      Dirless makes every team member a first-class Linux user on every
+      enrolled server. Manage users through the web portal, sync from AWS IAM
+      Identity Center, or both. No LDAP, no FreeIPA, no extra infrastructure.
     </p>
     <div class="hero-actions">
       <a href="/how-it-works.html" class="btn-primary">See how it works</a>
@@ -637,17 +681,18 @@
     <div class="problem-grid">
       <div>
         <div class="section-label">The Problem</div>
-        <h2>Your cloud identity<br>and your servers<br>don't speak.</h2>
+        <h2>Your team exists in your<br>IdP. Your servers<br>have no idea.</h2>
         <p class="section-desc">
-          Modern teams manage users in AWS IAM Identity Center. But Linux servers
-          have no idea those users exist. The traditional fix is painful.
+          Whether you use AWS IAM Identity Center, manage users manually, or both,
+          getting those identities onto Linux servers has always meant standing up
+          LDAP. That traditional fix is painful.
         </p>
         <ul class="problem-list">
           <li>
             <div class="problem-icon">🏗</div>
             <div>
               <strong>A second system to maintain</strong>
-              <p>FreeIPA or a fake LDAP server — with its own servers, replication, and failure modes.</p>
+              <p>FreeIPA or a fake LDAP server - with its own servers, replication, and failure modes.</p>
             </div>
           </li>
           <li>
@@ -684,13 +729,14 @@
 
           <div class="arch-col good">
             <div class="arch-col-label">With Dirless</div>
-            <div class="arch-node">AWS Identity Center</div>
-            <div class="arch-connector"><span class="arch-line">│</span></div>
-            <div class="arch-node"><img src="/dirless.png" class="arch-logo">Dirless Syncer<br><small style="font-weight:400;opacity:0.75;">1 or more EC2 instances in your AWS account</small></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+              <div class="arch-node">AWS Identity Center<br><small style="font-weight:400;opacity:0.75;">optional</small></div>
+              <div class="arch-node">Web Portal<br><small style="font-weight:400;opacity:0.75;">standalone</small></div>
+            </div>
             <div class="arch-connector"><span class="arch-line">│</span></div>
             <div class="arch-node"><img src="/dirless.png" class="arch-logo">Dirless Backend<br><small style="font-weight:400;opacity:0.75;">hosted by Dirless</small></div>
             <div class="arch-connector"><span class="arch-line">│</span></div>
-            <div class="arch-node"><img src="/dirless.png" class="arch-logo">Dirless Agent<br><small style="font-weight:400;opacity:0.75;">can live in and outside of AWS</small></div>
+            <div class="arch-node"><img src="/dirless.png" class="arch-logo">Dirless Agent<br><small style="font-weight:400;opacity:0.75;">any Linux host, anywhere</small></div>
             <div class="arch-connector"><span class="arch-line">│</span></div>
             <div class="arch-node"><img src="/dirless.png" class="arch-logo">Dirless NSS module</div>
           </div>
@@ -720,7 +766,8 @@
     <div class="section-label">Features</div>
     <h2>What Dirless gives you.</h2>
     <p class="section-desc">
-      More than just user resolution — a complete identity foundation for your Linux fleet.
+      A complete identity system for your Linux fleet. Use it with AWS IAM Identity Center,
+      without it, or anywhere in between.
     </p>
     <div class="feature-grid">
       <div class="feature-card">
@@ -728,7 +775,7 @@
         <h3>Consistent UIDs and GIDs</h3>
         <p>
           Every user and group gets a stable UID/GID that is identical across your entire fleet.
-          Shared filesystems like EFS and NFS work correctly because alice is always UID 40001 — everywhere.
+          Shared filesystems like EFS and NFS work correctly because alice is always UID 40001 - everywhere.
         </p>
       </div>
       <div class="feature-card">
@@ -743,7 +790,7 @@
         <div class="feature-card-icon" style="background:rgba(210,169,34,0.12)">🛡</div>
         <h3>Resilient by default</h3>
         <p>
-          NSS lookups read the local SQLite database — no network call at query time.
+          NSS lookups read the local database - no network call at query time.
           A backend outage or network disruption does not lock users out of their hosts.
         </p>
       </div>
@@ -751,8 +798,25 @@
         <div class="feature-card-icon" style="background:rgba(167,113,247,0.12)">🔍</div>
         <h3>Real names in audit logs</h3>
         <p>
-          <code>ls -la</code>, <code>ps aux</code>, audit logs — they all show real usernames,
+          <code>ls -la</code>, <code>ps aux</code>, audit logs - they all show real usernames,
           not raw UIDs. Your forensics team will thank you.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(63,185,80,0.12)">🌐</div>
+        <h3>Works without AWS</h3>
+        <p>
+          No AWS account? No problem. Add users directly through the web portal
+          and they become native Linux identities on every enrolled server. Dirless
+          is a full identity management system, not just a syncer.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(88,166,255,0.12)">🖥</div>
+        <h3>Web management portal</h3>
+        <p>
+          Add and remove users, manage SSH keys, monitor enrolled nodes, and
+          administer your whole deployment through a web dashboard. No CLI needed.
         </p>
       </div>
       <div class="feature-card">
@@ -760,7 +824,7 @@
         <h3>SSM sessions as yourself</h3>
         <p>
           AWS Systems Manager can run sessions as the connecting Identity Center user
-          instead of the generic <code>ssm-user</code> — but only if that user exists in the OS.
+          instead of the generic <code>ssm-user</code> - but only if that user exists in the OS.
           Dirless makes that happen automatically.
         </p>
       </div>
@@ -784,7 +848,7 @@
     <h2>Simple, server-based pricing.</h2>
     <p class="section-desc">
       No per-user fees that scale with your headcount. Pay for the servers you enroll, nothing more.
-      All plans include the full feature set — hosted on our global 3-node cluster.
+      All plans include the full feature set - hosted on our global 3-node cluster.
     </p>
     <div class="pricing-wrapper">
       <span class="pricing-wrapper-badge">Beta</span>
@@ -798,10 +862,10 @@
           <span class="amount">$0</span>
           <span class="period">/ mo</span>
         </div>
-        <div class="pricing-limit">Up to 3 servers</div>
+        <div class="pricing-limit">Up to 10 servers</div>
         <p class="pricing-desc">Free forever. A permanent tier for small setups and evaluation.</p>
         <ul>
-<li>Up to 3 enrolled servers</li>
+<li>Up to 10 enrolled servers</li>
           <li>Best-effort support</li>
           <li>3-node HA backend</li>
         </ul>
@@ -811,35 +875,14 @@
         </a>
       </div>
 
-      <div class="pricing-card">
-        <h3>Starter</h3>
-        <div class="pricing-price">
-          <span class="amount" style="text-decoration:line-through;opacity:0.4;font-size:1.4rem;">$49</span>
-          <span class="period" style="text-decoration:line-through;opacity:0.4;">/ mo</span>
-        </div>
-        <div class="pricing-price" style="margin-top:-0.5rem;">
-          <span class="amount">$24.50</span>
-          <span class="period">/ mo</span>
-        </div>
-        <div style="font-size:0.75rem;color:var(--accent2);margin-top:-0.25rem;">50% off while in beta - keep the 50% discount forever if you sign up during beta and stay subscribed</div>
-        <div class="pricing-limit">Up to 10 servers</div>
-        <p class="pricing-desc">For small teams and early-stage companies getting off the ground with AWS Identity Center.</p>
-        <ul>
-<li>Up to 10 enrolled servers</li>
-          <li>Email support</li>
-          <li>3-node HA backend</li>
-        </ul>
-        <a href="https://portal.dirless.com/register?plan=starter" class="pricing-cta">Get started →</a>
-      </div>
-
       <div class="pricing-card featured">
         <h3>Growth</h3>
         <div class="pricing-price">
-          <span class="amount" style="text-decoration:line-through;opacity:0.4;font-size:1.4rem;">$199</span>
+          <span class="amount" style="text-decoration:line-through;opacity:0.4;font-size:1.4rem;">$10</span>
           <span class="period" style="text-decoration:line-through;opacity:0.4;">/ mo</span>
         </div>
         <div class="pricing-price" style="margin-top:-0.5rem;">
-          <span class="amount">$99.50</span>
+          <span class="amount">$5</span>
           <span class="period">/ mo</span>
         </div>
         <div style="font-size:0.75rem;color:var(--accent2);margin-top:-0.25rem;">50% off while in beta - keep the 50% discount forever if you sign up during beta and stay subscribed</div>
@@ -856,11 +899,11 @@
       <div class="pricing-card">
         <h3>Scale</h3>
         <div class="pricing-price">
-          <span class="amount" style="text-decoration:line-through;opacity:0.4;font-size:1.4rem;">$499</span>
+          <span class="amount" style="text-decoration:line-through;opacity:0.4;font-size:1.4rem;">$30</span>
           <span class="period" style="text-decoration:line-through;opacity:0.4;">/ mo</span>
         </div>
         <div class="pricing-price" style="margin-top:-0.5rem;">
-          <span class="amount">$249.50</span>
+          <span class="amount">$15</span>
           <span class="period">/ mo</span>
         </div>
         <div style="font-size:0.75rem;color:var(--accent2);margin-top:-0.25rem;">50% off while in beta - keep the 50% discount forever if you sign up during beta and stay subscribed</div>
@@ -913,7 +956,7 @@
 <section class="cta-section">
   <div class="section-inner">
     <h2>Ready to ditch LDAP?</h2>
-    <p>Enroll your first node in under a minute. No infrastructure changes required.</p>
+    <p>Enroll your first node in under a minute. No infrastructure changes, no AWS account required.</p>
     <div class="hero-actions">
       <a href="https://portal.dirless.com/register" class="btn-primary">Create a free account →</a>
       <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;" class="btn-secondary">Talk to us</a>
@@ -929,11 +972,9 @@
   <span class="built-with-sep">·</span>
   <a href="https://github.com/dirless/age-crystal" target="_blank" rel="noopener">AGE encryption</a>
   <span class="built-with-sep">·</span>
-  <a href="https://www.sqlite.org" target="_blank" rel="noopener"><img class="bw-logo bw-logo-bg" src="/img/tech/sqlite.svg" alt="">SQLite</a>
+  <a href="https://github.com/dirless/trash-panda-db" target="_blank" rel="noopener">TrashPandaDB</a>
   <span class="built-with-sep">·</span>
   <a href="https://caddyserver.com" target="_blank" rel="noopener"><img class="bw-logo bw-logo-bg" src="/img/tech/caddy.svg" alt="">Caddy</a>
-  <span class="built-with-sep">·</span>
-  <a href="https://www.atlantic.net" target="_blank" rel="noopener"><img class="bw-logo bw-logo-bg" src="/img/tech/atlanticnet.ico" alt="">Atlantic.Net</a>
   <span class="built-with-sep">·</span>
   <a href="https://www.racknerd.com" target="_blank" rel="noopener"><img class="bw-logo bw-logo-bg" src="/img/tech/racknerd.ico" alt="">RackNerd</a>
   <span class="built-with-sep">·</span>
@@ -943,7 +984,7 @@
 <!-- FOOTER -->
 <footer>
   <span class="footer-logo"><img src="/dirless.png" alt="Dirless" /></span>
-  <p>Linux identity from AWS IAM Identity Center — without the complexity.</p>
+  <p>Linux identity management without LDAP, FreeIPA, or extra infrastructure.</p>
   <div class="footer-links">
     <a href="https://github.com/dirless">GitHub</a>
     <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;">Contact</a>
