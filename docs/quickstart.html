@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Get Dirless running in minutes: enroll a Linux host, install the agent, and resolve IAM Identity Center users natively — no LDAP, no FreeIPA." />
+  <title>Quickstart - Dirless Docs</title>
+  <link rel="canonical" href="https://dirless.com/docs/quickstart.html" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/dirless.png" />
+  <link rel="apple-touch-icon" href="/dirless.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dirless.com/docs/quickstart.html" />
+  <meta property="og:title" content="Dirless Quickstart" />
+  <meta property="og:description" content="Enroll a Linux host, install the agent, and resolve IAM Identity Center users natively — no LDAP, no FreeIPA." />
+  <meta property="og:image" content="https://dirless.com/dirless.png" />
+  <meta property="og:site_name" content="Dirless" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #1c2330;
+      --border:    #30363d;
+      --accent:    #58a6ff;
+      --accent2:   #3fb950;
+      --muted:     #8b949e;
+      --text:      #e6edf3;
+      --text-dim:  #c9d1d9;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13,17,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo img { height: 36px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { color: var(--text-dim); font-size: 0.9rem; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-cta {
+      background: var(--accent);
+      color: #0d1117 !important;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .nav-cta:hover { opacity: 0.85; text-decoration: none !important; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; height: auto; min-height: 52px; flex-wrap: wrap; gap: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+      .nav-links { gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+      .nav-links a { font-size: 0.78rem; }
+      .nav-cta { padding: 0.3rem 0.65rem; font-size: 0.78rem; }
+    }
+
+    /* ── LAYOUT ── */
+    .page-inner {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .breadcrumb {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--muted); }
+    .breadcrumb a:hover { color: var(--accent); }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .page-desc {
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    /* ── PREREQS ── */
+    .prereqs {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .prereqs h3 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .prereqs ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .prereqs li {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      padding-left: 1.25rem;
+      position: relative;
+    }
+    .prereqs li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+    }
+
+    /* ── STEP SECTIONS ── */
+    .step-section {
+      margin-bottom: 3rem;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      white-space: nowrap;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .step-body p {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .step-body p:last-child { margin-bottom: 0; }
+
+    /* ── CODE BLOCKS ── */
+    .code-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 1rem 0;
+      overflow: hidden;
+    }
+
+    .code-label {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.4rem 1rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .code-block pre {
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 0;
+    }
+
+    .code-block code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.84rem;
+      line-height: 1.6;
+      color: var(--text-dim);
+    }
+
+    .code-block code .cm { color: var(--muted); }
+    .code-block code .kw { color: var(--accent); }
+    .code-block code .pl { color: var(--accent2); }
+
+    /* inline code */
+    p code, li code {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1em 0.4em;
+      font-size: 0.85em;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    /* ── NOTE / CALLOUT ── */
+    .note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--muted);
+      border-radius: 6px;
+      padding: 0.9rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .note strong { color: var(--text); }
+
+    /* ── OPTIONAL SECTION ── */
+    .optional-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .optional-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(88,166,255,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(88,166,255,0.25);
+      border-radius: 4px;
+      padding: 0.15em 0.6em;
+      margin-bottom: 0.75rem;
+    }
+
+    .optional-section h2 {
+      margin-bottom: 1rem;
+    }
+
+    .optional-section p {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    /* ── IAM POLICY ── */
+    .iam-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    /* ── NEXT STEPS ── */
+    .next-steps {
+      margin-top: 1rem;
+    }
+
+    .next-steps h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .next-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .next-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-size: 0.88rem;
+      transition: border-color 0.15s;
+    }
+    .next-card:hover { border-color: var(--accent); text-decoration: none; }
+    .next-card-title { font-weight: 600; color: var(--text); margin-bottom: 0.4rem; display: block; }
+    .next-card-desc { color: var(--muted); font-size: 0.82rem; line-height: 1.5; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-logo img { height: 28px; width: auto; opacity: 0.7; }
+    footer p { font-size: 0.82rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.82rem; color: var(--muted); }
+    .footer-links a:hover { color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo"><img src="/dirless.png" alt="Dirless" /></a>
+  <div class="nav-links">
+    <a href="/how-it-works.html">How it works</a>
+    <a href="/#features">Features</a>
+    <a href="/#models">Pricing</a>
+    <a href="/faq.html">FAQ</a>
+    <a href="/docs/quickstart.html">Docs</a>
+    <a href="https://github.com/dirless" class="nav-cta">GitHub &rarr;</a>
+    <a href="https://portal.dirless.com/register" class="nav-cta" style="background:var(--accent2);margin-left:0.5rem;">Sign up &rarr;</a>
+  </div>
+</nav>
+
+<div class="page-inner">
+
+  <div class="breadcrumb">Docs / Quickstart</div>
+  <div class="section-label">Quickstart</div>
+  <h1>Up and running in minutes.</h1>
+  <p class="page-desc">
+    This guide walks you from a fresh Dirless account to a Linux host
+    resolving users natively - no LDAP server, no FreeIPA, no SSSD.
+  </p>
+
+  <!-- Prerequisites -->
+  <div class="prereqs">
+    <h3>Before you start</h3>
+    <ul>
+      <li>A Dirless account - <a href="https://portal.dirless.com/register">sign up free</a> if you don't have one</li>
+      <li>A Linux host running RHEL, Amazon Linux 2023, or a compatible distro (RPM install), or any 64-bit Linux (binary install)</li>
+      <li>Root access on the host</li>
+    </ul>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="step-section">
+    <div class="step-header">
+      <span class="step-num">Step 1</span>
+      <h2>Get your enrollment token from the portal</h2>
+    </div>
+    <div class="step-body">
+      <p>
+        After signing up at <a href="https://portal.dirless.com">portal.dirless.com</a>,
+        open your account dashboard. You'll find three values you need for enrollment:
+      </p>
+      <ul style="list-style:none;padding-left:0;display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;">
+        <li style="font-size:0.9rem;color:var(--text-dim);padding-left:1.25rem;position:relative;">
+          <span style="position:absolute;left:0;color:var(--muted);">•</span>
+          <strong>Enrollment token</strong> - a secret used once to register a host
+        </li>
+        <li style="font-size:0.9rem;color:var(--text-dim);padding-left:1.25rem;position:relative;">
+          <span style="position:absolute;left:0;color:var(--muted);">•</span>
+          <strong>Backend URL</strong> - your unique subdomain, e.g. <code>https://yourname.dirless.com</code>
+        </li>
+        <li style="font-size:0.9rem;color:var(--text-dim);padding-left:1.25rem;position:relative;">
+          <span style="position:absolute;left:0;color:var(--muted);">•</span>
+          <strong>Tenant ID</strong> - needed for non-EC2 hosts (auto-derived on EC2)
+        </li>
+      </ul>
+      <p>Keep this browser tab open - you'll need these values in the next step.</p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Step 2 -->
+  <div class="step-section">
+    <div class="step-header">
+      <span class="step-num">Step 2</span>
+      <h2>Install the packages</h2>
+    </div>
+    <div class="step-body">
+      <p>On the Linux host you want to enroll, add the Dirless RPM repository and install both packages:</p>
+
+      <div class="code-block">
+        <div class="code-label">Shell (RHEL / Amazon Linux 2023)</div>
+        <pre><code>curl -fsSL https://dirless.com/rpm/dirless.repo \
+  -o /etc/yum.repos.d/dirless.repo
+
+dnf install -y dirless-cli dirless-agent</code></pre>
+      </div>
+
+      <p>This installs <code>dirless-cli</code> (used once to enroll the host) and
+      <code>dirless-agent</code> (the daemon that runs permanently). The agent package
+      also installs <code>libnss_dirless.so.2</code> and its systemd unit.</p>
+
+      <div class="note">
+        <strong>Not on RHEL/AL2023?</strong> Download standalone binaries instead:<br><br>
+        <code>curl -fsSL https://github.com/dirless/dirless-cli/releases/latest/download/dirless-cli-x86_64 -o /usr/local/bin/dirless-cli &amp;&amp; chmod +x /usr/local/bin/dirless-cli</code><br><br>
+        <code>curl -fsSL https://github.com/dirless/dirless-agent/releases/latest/download/dirless-agent-x86_64 -o /usr/local/bin/dirless-agent &amp;&amp; chmod +x /usr/local/bin/dirless-agent</code>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Step 3 -->
+  <div class="step-section">
+    <div class="step-header">
+      <span class="step-num">Step 3</span>
+      <h2>Enroll the host</h2>
+    </div>
+    <div class="step-body">
+      <p>
+        Run <code>dirless-cli enroll</code> with the token and server URL from the portal.
+        This generates an mTLS certificate bundle and an age encryption keypair, then
+        registers the host with your backend.
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">On an EC2 instance (tenant ID auto-derived)</div>
+        <pre><code>dirless-cli enroll \
+  --token &lt;your-enrollment-token&gt; \
+  --server https://&lt;yourname&gt;.dirless.com</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-label">On any other host (bare metal, GCP, Azure, on-prem)</div>
+        <pre><code>dirless-cli enroll \
+  --tenant-id &lt;your-tenant-id&gt; \
+  --token &lt;your-enrollment-token&gt; \
+  --server https://&lt;yourname&gt;.dirless.com</code></pre>
+      </div>
+
+      <p>
+        On success, enrollment writes credentials to <code>/etc/dirless/</code>:
+        a CA bundle, client certificate, age private key, and HMAC key.
+        The agent uses these automatically - you don't need to copy them anywhere.
+      </p>
+
+      <div class="note">
+        <strong>EC2 auto-derivation:</strong> On EC2, the tenant ID is derived from your
+        AWS account ID via the instance metadata service. This means your syncer and agents
+        automatically share the same backend identity without manual coordination.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Step 4 -->
+  <div class="step-section">
+    <div class="step-header">
+      <span class="step-num">Step 4</span>
+      <h2>Configure and start the agent</h2>
+    </div>
+    <div class="step-body">
+      <p>Copy the example config and set your backend URL:</p>
+
+      <div class="code-block">
+        <div class="code-label">Shell</div>
+        <pre><code>cp /etc/dirless/dirless-agent.example.toml /etc/dirless/dirless-agent.toml</code></pre>
+      </div>
+
+      <p>Edit <code>/etc/dirless/dirless-agent.toml</code> and set the backend URL:</p>
+
+      <div class="code-block">
+        <div class="code-label">/etc/dirless/dirless-agent.toml</div>
+        <pre><code>[backend]
+url = "https://&lt;yourname&gt;.dirless.com"
+
+[auth]
+hmac_secret = "&lt;from /etc/dirless/hmac.key&gt;"
+tenant_id   = "&lt;from portal or enrollment output&gt;"
+
+[local]
+db_path      = "/var/lib/dirless/local.db"
+age_key_path = "/etc/dirless/age.key"</code></pre>
+      </div>
+
+      <p>Then enable and start the daemon:</p>
+
+      <div class="code-block">
+        <div class="code-label">Shell</div>
+        <pre><code>systemctl enable --now dirless-agent</code></pre>
+      </div>
+
+      <p>
+        The agent connects to the backend, downloads the encrypted identity snapshot,
+        decrypts it with the age key from <code>/etc/dirless/age.key</code>, and writes
+        user and group data to <code>/var/lib/dirless/local.db</code>.
+        It refreshes this snapshot in the background every 60 seconds by default.
+      </p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Step 5 -->
+  <div class="step-section">
+    <div class="step-header">
+      <span class="step-num">Step 5</span>
+      <h2>Enable the NSS module</h2>
+    </div>
+    <div class="step-body">
+      <p>
+        Edit <code>/etc/nsswitch.conf</code> and add <code>dirless</code> after
+        <code>files</code> on the <code>passwd</code>, <code>group</code>, and
+        <code>shadow</code> lines:
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">/etc/nsswitch.conf (relevant lines)</div>
+        <pre><code>passwd:   files systemd dirless
+group:    files systemd dirless
+shadow:   files dirless</code></pre>
+      </div>
+
+      <p>
+        The <code>dirless</code> keyword maps to <code>libnss_dirless.so.2</code>,
+        which was installed by the <code>dirless-agent</code> package.
+        NSS lookups read from <code>local.db</code> directly - no network call,
+        no daemon socket. If the backend is unreachable, lookups continue working
+        from the last snapshot.
+      </p>
+
+      <div class="note">
+        <strong>No restart needed.</strong> Changes to <code>nsswitch.conf</code>
+        take effect immediately for new processes. Running processes that already
+        cached their NSS configuration (like <code>sshd</code>) may need a reload
+        to pick up the new module.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Step 6 -->
+  <div class="step-section">
+    <div class="step-header">
+      <span class="step-num">Step 6</span>
+      <h2>Add a user and verify</h2>
+    </div>
+    <div class="step-body">
+      <p>
+        Add a user through the <a href="https://portal.dirless.com">Dirless portal</a>
+        (or wait for the syncer to pull one from IAM Identity Center if you've set
+        that up). After the next sync cycle - at most 60 seconds - the user should
+        resolve on the host.
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">Shell</div>
+        <pre><code># Check that the user resolves
+getent passwd alice
+
+# Check group membership
+id alice
+
+# List all Dirless-managed users
+getent passwd | grep -v nologin</code></pre>
+      </div>
+
+      <p>
+        If you see the user's entry (with a UID in the 60000+ range), Dirless
+        is working. The user now exists as a native Linux identity and can log in
+        via SSH, run <code>sudo</code>, and appear correctly in <code>ls -la</code>
+        output on shared filesystems.
+      </p>
+
+      <div class="note">
+        <strong>User not appearing yet?</strong> Check <code>journalctl -u dirless-agent -n 50</code>
+        to see the agent's sync status. A fresh account has no users until you add
+        one through the portal or configure the syncer.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Optional: Syncer -->
+  <div class="optional-section">
+    <span class="optional-badge">Optional</span>
+    <h2>Sync from AWS IAM Identity Center</h2>
+    <p>
+      If your team already uses AWS IAM Identity Center, the Dirless syncer
+      pulls users, groups, and memberships automatically and pushes them to
+      your backend. Skip this if you're managing users through the portal only.
+    </p>
+
+    <p>
+      The syncer must run on an EC2 instance inside your AWS account with an
+      IAM role attached. It fetches credentials from the instance metadata
+      service - no static AWS keys are ever stored.
+    </p>
+
+    <p><strong>IAM permissions required on the instance role:</strong></p>
+
+    <div class="code-block">
+      <div class="code-label">IAM policy (JSON)</div>
+      <pre><code>{
+  "Effect": "Allow",
+  "Action": [
+    "identitystore:ListUsers",
+    "identitystore:ListGroups",
+    "identitystore:ListGroupMemberships"
+  ],
+  "Resource": "*"
+}</code></pre>
+    </div>
+
+    <p><strong>Install and configure the syncer on the EC2 instance:</strong></p>
+
+    <div class="code-block">
+      <div class="code-label">Shell</div>
+      <pre><code># Install
+dnf install -y dirless-syncer
+
+# Create config
+cat &gt; /etc/dirless/dirless-syncer.toml &lt;&lt;'EOF'
+[backend]
+url              = "https://&lt;yourname&gt;.dirless.com"
+enrollment_token = "&lt;your-enrollment-token&gt;"
+
+[syncer]
+interval_seconds = 300
+EOF
+
+# Start
+systemctl enable --now dirless-syncer</code></pre>
+    </div>
+
+    <p>
+      On first run the syncer uses the enrollment token to register with the backend,
+      then begins pulling your Identity Center directory on the configured interval
+      (default: every 5 minutes). The token can be removed from the config after
+      the first successful run.
+    </p>
+
+    <p>
+      Once the syncer is running, any user or group change in Identity Center
+      propagates to every enrolled Linux host within one sync interval.
+      UIDs and GIDs are stable - they never change even if a user is removed
+      and re-added.
+    </p>
+  </div>
+
+  <!-- What's next -->
+  <div class="next-steps">
+    <h2>What's next</h2>
+    <div class="next-cards">
+      <a href="/how-it-works.html" class="next-card">
+        <span class="next-card-title">How it works</span>
+        <span class="next-card-desc">The four components and how they fit together.</span>
+      </a>
+      <a href="/faq.html" class="next-card">
+        <span class="next-card-title">FAQ</span>
+        <span class="next-card-desc">Offline resilience, UID assignment, self-hosting, encryption, and more.</span>
+      </a>
+      <a href="https://portal.dirless.com" class="next-card">
+        <span class="next-card-title">Portal</span>
+        <span class="next-card-desc">Add users, manage enrolled hosts, view your enrollment token.</span>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-logo"><img src="/dirless.png" alt="Dirless" /></span>
+  <p>Linux identity management without LDAP, FreeIPA, or extra infrastructure.</p>
+  <div class="footer-links">
+    <a href="https://github.com/dirless">GitHub</a>
+    <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
