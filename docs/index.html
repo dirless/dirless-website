@@ -402,7 +402,35 @@
   <div class="step-section">
     <div class="step-header">
       <span class="step-num">Step 1</span>
-      <h2>Get your enrollment token and generate an age keypair</h2>
+      <h2>Generate an age keypair</h2>
+    </div>
+    <div class="step-body">
+      <p>
+        Dirless uses <a href="https://age-encryption.org" target="_blank" rel="noopener">age encryption</a>
+        to protect identity snapshots end-to-end. The private key never leaves your hosts -
+        the backend only ever sees the public key.
+      </p>
+      <p>
+        Generate your keypair at <a href="/age-keypair.html">dirless.com/age-keypair.html</a>
+        and save the downloaded private key file somewhere safe on each host you enroll
+        (e.g. <code>/root/dirless-age.key</code>). You use the same keypair across your
+        entire fleet.
+      </p>
+      <div class="note">
+        <strong>Keep the private key safe.</strong> If you lose it, enrolled hosts will no
+        longer be able to decrypt identity snapshots. Store a backup in a password manager
+        or secure vault.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Step 2 -->
+  <div class="step-section">
+    <div class="step-header">
+      <span class="step-num">Step 2</span>
+      <h2>Get your enrollment token from the portal</h2>
     </div>
     <div class="step-body">
       <p>
@@ -419,13 +447,6 @@
           <strong>Backend URL</strong> - your unique subdomain, e.g. <code>https://yourname.dirless.com</code>
         </li>
       </ul>
-      <p>
-        You also need an <strong>age keypair</strong>. Dirless uses age encryption to protect
-        your identity snapshots end-to-end - the private key never leaves your hosts.
-        Generate one at <a href="/age-keypair.html">dirless.com/age-keypair.html</a> and
-        save the private key file somewhere safe (e.g. <code>/root/dirless-age.key</code>).
-        You reuse the same key across all hosts in your fleet.
-      </p>
       <div class="note">
         <strong>On non-EC2 hosts</strong> you'll also need your <strong>Tenant ID</strong>
         from the portal. On EC2, it is derived automatically from your AWS account ID.
@@ -435,10 +456,10 @@
 
   <hr class="divider" />
 
-  <!-- Step 2 -->
+  <!-- Step 3 -->
   <div class="step-section">
     <div class="step-header">
-      <span class="step-num">Step 2</span>
+      <span class="step-num">Step 3</span>
       <h2>Install the packages</h2>
     </div>
     <div class="step-body">
@@ -476,10 +497,10 @@ dnf install -y dirless-cli dirless-agent</code></pre>
 
   <hr class="divider" />
 
-  <!-- Step 3 -->
+  <!-- Step 4 -->
   <div class="step-section">
     <div class="step-header">
-      <span class="step-num">Step 3</span>
+      <span class="step-num">Step 4</span>
       <h2>Enroll the host</h2>
     </div>
     <div class="step-body">
@@ -523,10 +544,10 @@ dnf install -y dirless-cli dirless-agent</code></pre>
 
   <hr class="divider" />
 
-  <!-- Step 4 -->
+  <!-- Step 5 -->
   <div class="step-section">
     <div class="step-header">
-      <span class="step-num">Step 4</span>
+      <span class="step-num">Step 5</span>
       <h2>Start the agent</h2>
     </div>
     <div class="step-body">
@@ -552,10 +573,10 @@ dnf install -y dirless-cli dirless-agent</code></pre>
 
   <hr class="divider" />
 
-  <!-- Step 5 -->
+  <!-- Step 6 -->
   <div class="step-section">
     <div class="step-header">
-      <span class="step-num">Step 5</span>
+      <span class="step-num">Step 6</span>
       <h2>Enable the NSS module</h2>
     </div>
     <div class="step-body">
@@ -591,10 +612,10 @@ shadow:   files dirless</code></pre>
 
   <hr class="divider" />
 
-  <!-- Step 6 -->
+  <!-- Step 7 -->
   <div class="step-section">
     <div class="step-header">
-      <span class="step-num">Step 6</span>
+      <span class="step-num">Step 7</span>
       <h2>Add a user and verify</h2>
     </div>
     <div class="step-body">
