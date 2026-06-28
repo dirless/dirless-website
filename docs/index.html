@@ -344,6 +344,44 @@
       margin: 2.5rem 0;
     }
 
+    /* ── TABLE OF CONTENTS ── */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.8rem 0 2.2rem;
+      display: inline-block;
+      min-width: 260px;
+    }
+    .toc-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .toc ol {
+      margin: 0;
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .toc li { font-size: 0.88rem; }
+    .toc a { color: var(--text-dim); }
+    .toc a:hover { color: var(--text); }
+    .toc .toc-optional {
+      list-style: none;
+      margin-left: -1.2rem;
+      margin-top: 0.3rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .toc .toc-optional a { color: var(--muted); }
+    .toc .toc-optional a:hover { color: var(--text-dim); }
+
     /* ── FOOTER ── */
     footer {
       background: var(--bg);
@@ -397,8 +435,23 @@
     </ul>
   </div>
 
+  <!-- Table of contents -->
+  <nav class="toc">
+    <div class="toc-title">On this page</div>
+    <ol>
+      <li><a href="#step-1">Generate an age keypair</a></li>
+      <li><a href="#step-2">Get your enrollment token</a></li>
+      <li><a href="#step-3">Install the packages</a></li>
+      <li><a href="#step-4">Enroll the host</a></li>
+      <li><a href="#step-5">Start the agent</a></li>
+      <li><a href="#step-6">Wire up the NSS module</a></li>
+      <li><a href="#step-7">Add a user and verify</a></li>
+      <li class="toc-optional"><a href="#syncer">&#8627; Optional: sync from IAM Identity Center</a></li>
+    </ol>
+  </nav>
+
   <!-- Step 1 -->
-  <div class="step-section">
+  <div class="step-section" id="step-1">
     <div class="step-header">
       <span class="step-num">Step 1</span>
       <h2>Generate an age keypair</h2>
@@ -426,7 +479,7 @@
   <hr class="divider" />
 
   <!-- Step 2 -->
-  <div class="step-section">
+  <div class="step-section" id="step-2">
     <div class="step-header">
       <span class="step-num">Step 2</span>
       <h2>Get your enrollment token from the portal</h2>
@@ -456,7 +509,7 @@
   <hr class="divider" />
 
   <!-- Step 3 -->
-  <div class="step-section">
+  <div class="step-section" id="step-3">
     <div class="step-header">
       <span class="step-num">Step 3</span>
       <h2>Install the packages</h2>
@@ -497,7 +550,7 @@ dnf install -y dirless-cli dirless-agent</code></pre>
   <hr class="divider" />
 
   <!-- Step 4 -->
-  <div class="step-section">
+  <div class="step-section" id="step-4">
     <div class="step-header">
       <span class="step-num">Step 4</span>
       <h2>Enroll the host</h2>
@@ -544,7 +597,7 @@ dnf install -y dirless-cli dirless-agent</code></pre>
   <hr class="divider" />
 
   <!-- Step 5 -->
-  <div class="step-section">
+  <div class="step-section" id="step-5">
     <div class="step-header">
       <span class="step-num">Step 5</span>
       <h2>Start the agent</h2>
@@ -573,7 +626,7 @@ dnf install -y dirless-cli dirless-agent</code></pre>
   <hr class="divider" />
 
   <!-- Step 6 -->
-  <div class="step-section">
+  <div class="step-section" id="step-6">
     <div class="step-header">
       <span class="step-num">Step 6</span>
       <h2>Wire up the NSS module (binary install only)</h2>
@@ -609,7 +662,7 @@ group:    files dirless systemd</code></pre>
   <hr class="divider" />
 
   <!-- Step 7 -->
-  <div class="step-section">
+  <div class="step-section" id="step-7">
     <div class="step-header">
       <span class="step-num">Step 7</span>
       <h2>Add a user and verify</h2>
@@ -652,7 +705,7 @@ getent passwd | grep -v nologin</code></pre>
   <hr class="divider" />
 
   <!-- Optional: Syncer -->
-  <div class="optional-section">
+  <div class="optional-section" id="syncer">
     <span class="optional-badge">Optional</span>
     <h2>Sync from AWS IAM Identity Center</h2>
     <p>
