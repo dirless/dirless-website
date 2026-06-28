@@ -402,28 +402,34 @@
   <div class="step-section">
     <div class="step-header">
       <span class="step-num">Step 1</span>
-      <h2>Get your enrollment token from the portal</h2>
+      <h2>Get your enrollment token and generate an age keypair</h2>
     </div>
     <div class="step-body">
       <p>
         After signing up at <a href="https://portal.dirless.com">portal.dirless.com</a>,
-        open your account dashboard. You'll find three values you need for enrollment:
+        open your account dashboard. Note down two values you'll need:
       </p>
       <ul style="list-style:none;padding-left:0;display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;">
         <li style="font-size:0.9rem;color:var(--text-dim);padding-left:1.25rem;position:relative;">
           <span style="position:absolute;left:0;color:var(--muted);">•</span>
-          <strong>Enrollment token</strong> - a secret used once to register a host
+          <strong>Enrollment token</strong> - authenticates the host registration request
         </li>
         <li style="font-size:0.9rem;color:var(--text-dim);padding-left:1.25rem;position:relative;">
           <span style="position:absolute;left:0;color:var(--muted);">•</span>
           <strong>Backend URL</strong> - your unique subdomain, e.g. <code>https://yourname.dirless.com</code>
         </li>
-        <li style="font-size:0.9rem;color:var(--text-dim);padding-left:1.25rem;position:relative;">
-          <span style="position:absolute;left:0;color:var(--muted);">•</span>
-          <strong>Tenant ID</strong> - needed for non-EC2 hosts (auto-derived on EC2)
-        </li>
       </ul>
-      <p>Keep this browser tab open - you'll need these values in the next step.</p>
+      <p>
+        You also need an <strong>age keypair</strong>. Dirless uses age encryption to protect
+        your identity snapshots end-to-end - the private key never leaves your hosts.
+        Generate one at <a href="/age-keypair.html">dirless.com/age-keypair.html</a> and
+        save the private key file somewhere safe (e.g. <code>/root/dirless-age.key</code>).
+        You reuse the same key across all hosts in your fleet.
+      </p>
+      <div class="note">
+        <strong>On non-EC2 hosts</strong> you'll also need your <strong>Tenant ID</strong>
+        from the portal. On EC2, it is derived automatically from your AWS account ID.
+      </div>
     </div>
   </div>
 
@@ -478,14 +484,15 @@ dnf install -y dirless-cli dirless-agent</code></pre>
     </div>
     <div class="step-body">
       <p>
-        Run <code>dirless-cli enroll</code> with the token and server URL from the portal.
-        This generates an mTLS certificate bundle and an age encryption keypair, then
-        registers the host with your backend.
+        Run <code>dirless-cli enroll</code> with your age key, enrollment token, and backend URL.
+        This registers the host with your backend and writes everything the agent needs
+        to <code>/etc/dirless/</code> - including the agent config file.
       </p>
 
       <div class="code-block">
         <div class="code-label">On an EC2 instance (tenant ID auto-derived)</div>
         <pre><code>dirless-cli enroll \
+  --age-key /root/dirless-age.key \
   --token &lt;your-enrollment-token&gt; \
   --server https://&lt;yourname&gt;.dirless.com</code></pre>
       </div>
@@ -493,15 +500,17 @@ dnf install -y dirless-cli dirless-agent</code></pre>
       <div class="code-block">
         <div class="code-label">On any other host (bare metal, GCP, Azure, on-prem)</div>
         <pre><code>dirless-cli enroll \
+  --age-key /root/dirless-age.key \
   --tenant-id &lt;your-tenant-id&gt; \
   --token &lt;your-enrollment-token&gt; \
   --server https://&lt;yourname&gt;.dirless.com</code></pre>
       </div>
 
       <p>
-        On success, enrollment writes credentials to <code>/etc/dirless/</code>:
-        a CA bundle, client certificate, age private key, and HMAC key.
-        The agent uses these automatically - you don't need to copy them anywhere.
+        On success, enrollment writes two files to <code>/etc/dirless/</code>:
+        <code>age.key</code> (your age private key) and <code>hmac.key</code> (the HMAC secret
+        used to authenticate with the backend). It also writes a ready-to-use
+        <code>dirless-agent.toml</code> with all values already filled in.
       </p>
 
       <div class="note">
@@ -518,33 +527,14 @@ dnf install -y dirless-cli dirless-agent</code></pre>
   <div class="step-section">
     <div class="step-header">
       <span class="step-num">Step 4</span>
-      <h2>Configure and start the agent</h2>
+      <h2>Start the agent</h2>
     </div>
     <div class="step-body">
-      <p>Copy the example config and set your backend URL:</p>
-
-      <div class="code-block">
-        <div class="code-label">Shell</div>
-        <pre><code>cp /etc/dirless/dirless-agent.example.toml /etc/dirless/dirless-agent.toml</code></pre>
-      </div>
-
-      <p>Edit <code>/etc/dirless/dirless-agent.toml</code> and set the backend URL:</p>
-
-      <div class="code-block">
-        <div class="code-label">/etc/dirless/dirless-agent.toml</div>
-        <pre><code>[backend]
-url = "https://&lt;yourname&gt;.dirless.com"
-
-[auth]
-hmac_secret = "&lt;from /etc/dirless/hmac.key&gt;"
-tenant_id   = "&lt;from portal or enrollment output&gt;"
-
-[local]
-db_path      = "/var/lib/dirless/local.db"
-age_key_path = "/etc/dirless/age.key"</code></pre>
-      </div>
-
-      <p>Then enable and start the daemon:</p>
+      <p>
+        Enrollment already wrote <code>/etc/dirless/dirless-agent.toml</code> with the
+        correct backend URL, HMAC secret, tenant ID, and age key path. Just enable and
+        start the daemon:
+      </p>
 
       <div class="code-block">
         <div class="code-label">Shell</div>
@@ -552,10 +542,10 @@ age_key_path = "/etc/dirless/age.key"</code></pre>
       </div>
 
       <p>
-        The agent connects to the backend, downloads the encrypted identity snapshot,
-        decrypts it with the age key from <code>/etc/dirless/age.key</code>, and writes
-        user and group data to <code>/var/lib/dirless/local.db</code>.
-        It refreshes this snapshot in the background every 60 seconds by default.
+        The agent connects to the backend, fetches the encrypted identity snapshot,
+        decrypts it with your age key, and writes user and group data to
+        <code>/var/lib/dirless/local.db</code>. It refreshes in the background
+        every 60 seconds by default.
       </p>
     </div>
   </div>
