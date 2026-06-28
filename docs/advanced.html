@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Advanced Dirless features: SSH certificate access and host-based access control." />
+  <title>Advanced Features - Dirless</title>
+  <link rel="canonical" href="https://dirless.com/docs/advanced.html" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/dirless.png" />
+  <link rel="apple-touch-icon" href="/dirless.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dirless.com/docs/advanced.html" />
+  <meta property="og:title" content="Dirless Advanced Features" />
+  <meta property="og:description" content="SSH certificate access and host-based access control." />
+  <meta property="og:image" content="https://dirless.com/dirless.png" />
+  <meta property="og:site_name" content="Dirless" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #1c2330;
+      --border:    #30363d;
+      --accent:    #58a6ff;
+      --accent2:   #3fb950;
+      --muted:     #8b949e;
+      --text:      #e6edf3;
+      --text-dim:  #c9d1d9;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13,17,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo img { height: 36px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { color: var(--text-dim); font-size: 0.9rem; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-cta {
+      background: var(--accent);
+      color: #0d1117 !important;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .nav-cta:hover { opacity: 0.85; text-decoration: none !important; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; height: auto; min-height: 52px; flex-wrap: wrap; gap: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+      .nav-links { gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+      .nav-links a { font-size: 0.78rem; }
+      .nav-cta { padding: 0.3rem 0.65rem; font-size: 0.78rem; }
+    }
+
+    /* ── LAYOUT ── */
+    .page-inner {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .breadcrumb {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--muted); }
+    .breadcrumb a:hover { color: var(--accent); }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .page-desc {
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    /* ── FEATURE SECTIONS ── */
+    .feature-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      white-space: nowrap;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    .feature-body p {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .feature-body p:last-child { margin-bottom: 0; }
+
+    /* ── HOW IT WORKS DIAGRAM ── */
+    .flow-diagram {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0 1.25rem;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+    .flow-diagram .hl { color: var(--accent); }
+    .flow-diagram .hl2 { color: var(--accent2); }
+
+    /* ── CODE BLOCKS ── */
+    .code-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 1rem 0;
+      overflow: hidden;
+    }
+
+    .code-label {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.4rem 1rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+    }
+
+    .code-block pre {
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 0;
+    }
+
+    .code-block code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.84rem;
+      line-height: 1.6;
+      color: var(--text-dim);
+    }
+
+    /* inline code */
+    p code, li code, td code {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1em 0.4em;
+      font-size: 0.85em;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    /* ── NOTE / CALLOUT ── */
+    .note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--muted);
+      border-radius: 6px;
+      padding: 0.9rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .note strong { color: var(--text); }
+
+    /* ── TABLE ── */
+    .config-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.88rem;
+    }
+    .config-table th {
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .config-table td {
+      padding: 0.6rem 0.75rem;
+      color: var(--text-dim);
+      border-bottom: 1px solid rgba(48,54,61,0.5);
+      vertical-align: top;
+    }
+    .config-table tr:last-child td { border-bottom: none; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 3rem 0;
+    }
+
+    /* ── TABLE OF CONTENTS ── */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.8rem 0 2.5rem;
+      display: block;
+      max-width: 420px;
+    }
+    .toc-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .toc ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .toc li { font-size: 0.88rem; }
+    .toc a { color: var(--text-dim); }
+    .toc a:hover { color: var(--text); }
+
+    /* ── NEXT STEPS ── */
+    .next-steps { margin-top: 1rem; }
+    .next-steps h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+    .next-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .next-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-size: 0.88rem;
+      transition: border-color 0.15s;
+    }
+    .next-card:hover { border-color: var(--accent); text-decoration: none; }
+    .next-card-title { font-weight: 600; color: var(--text); margin-bottom: 0.4rem; display: block; }
+    .next-card-desc { color: var(--muted); font-size: 0.82rem; line-height: 1.5; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-logo img { height: 28px; width: auto; opacity: 0.7; }
+    footer p { font-size: 0.82rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.82rem; color: var(--muted); }
+    .footer-links a:hover { color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo"><img src="/dirless.png" alt="Dirless" /></a>
+  <div class="nav-links">
+    <a href="/how-it-works.html">How it works</a>
+    <a href="/#features">Features</a>
+    <a href="/#models">Pricing</a>
+    <a href="/faq.html">FAQ</a>
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/dirless" class="nav-cta">GitHub &rarr;</a>
+    <a href="https://portal.dirless.com/register" class="nav-cta" style="background:var(--accent2);margin-left:0.5rem;">Sign up &rarr;</a>
+  </div>
+</nav>
+
+<div class="page-inner">
+
+  <div class="breadcrumb"><a href="/">dirless.com</a> / <a href="/docs/">Documentation</a> / Advanced Features</div>
+  <div class="section-label">Advanced Features</div>
+  <h1>Go further with Dirless.</h1>
+  <p class="page-desc">
+    SSH certificate access and host-based access control - both zero-infrastructure,
+    both enforced locally on each host.
+  </p>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <ul>
+      <li><a href="#ssh-certs">SSH Certificate Access</a></li>
+      <li><a href="#host-enforcement">Host-Based Access Control</a></li>
+    </ul>
+  </div>
+
+  <!-- ── SSH Certificates ── -->
+  <div class="feature-section" id="ssh-certs">
+    <div class="feature-header">
+      <span class="feature-badge">Feature</span>
+      <h2>SSH Certificate Access</h2>
+    </div>
+    <div class="feature-body">
+      <p>
+        Dirless issues short-lived SSH certificates to your users so they can SSH into
+        any enrolled host without managing <code>authorized_keys</code> files. There is
+        no certificate authority to run - Dirless generates a per-account SSH CA
+        automatically, and the agent distributes it to every enrolled host.
+      </p>
+
+      <h3>How it works</h3>
+      <div class="flow-diagram">
+<span class="hl">dirless-connect ssh register</span>   (once per user)<br>
+&nbsp; generates SSH + age keypairs locally<br>
+&nbsp; sends a magic link to the user's email<br>
+&nbsp; user clicks link → SSH public key stored in Dirless<br>
+<br>
+<span class="hl">dirless-connect ssh login</span>   (daily, or when cert expires)<br>
+&nbsp; Dirless encrypts a random nonce to the user's age public key<br>
+&nbsp; user decrypts it locally, proving key possession<br>
+&nbsp; Dirless signs an SSH certificate valid for the configured TTL (default 8 h)<br>
+&nbsp; certificate written to <span class="hl2">~/.config/dirless-connect/ssh/id_ed25519-cert.pub</span><br>
+<br>
+<span class="hl">ssh alice@hostname</span><br>
+&nbsp; sshd checks TrustedUserCAKeys (written by the agent on every enrolled host)<br>
+&nbsp; certificate validates → login succeeds, no authorized_keys lookup needed
+      </div>
+
+      <p>
+        The agent writes <code>/etc/ssh/dirless_ca.pub</code> and a
+        <code>TrustedUserCAKeys</code> drop-in to <code>/etc/ssh/sshd_config.d/dirless.conf</code>
+        automatically on each sync. No manual sshd configuration is needed on enrolled hosts.
+      </p>
+
+      <h3>Step 1 - Install dirless-connect on the user's workstation</h3>
+      <p>
+        <code>dirless-connect</code> is the end-user CLI. Each user installs it once on their
+        local machine (not on the servers).
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">Linux x86_64</div>
+        <pre><code>curl -Lo /usr/local/bin/dirless-connect \
+  https://github.com/dirless/dirless-connect/releases/latest/download/dirless-connect-x86_64
+chmod +x /usr/local/bin/dirless-connect</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-label">Linux aarch64</div>
+        <pre><code>curl -Lo /usr/local/bin/dirless-connect \
+  https://github.com/dirless/dirless-connect/releases/latest/download/dirless-connect-aarch64
+chmod +x /usr/local/bin/dirless-connect</code></pre>
+      </div>
+
+      <h3>Step 2 - Register (one time per user)</h3>
+      <p>
+        The user runs <code>dirless-connect ssh register</code> once. It prompts for the
+        account name (from the portal), their email address, and their Linux username. It
+        then generates keypairs locally and sends a magic link to their email.
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">Shell (user's workstation)</div>
+        <pre><code>dirless-connect ssh register</code></pre>
+      </div>
+
+      <p>
+        After clicking the link in the email, registration is complete. The user's SSH
+        public key is now stored in Dirless and will be distributed to all enrolled hosts
+        at the next sync cycle (within 60 seconds).
+      </p>
+
+      <h3>Step 3 - Get a certificate (daily)</h3>
+      <p>
+        To obtain or renew a certificate, the user runs:
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">Shell (user's workstation)</div>
+        <pre><code>dirless-connect ssh login</code></pre>
+      </div>
+
+      <p>
+        This performs a challenge-response exchange with the Dirless control plane - the
+        server encrypts a nonce to the user's age public key, the client decrypts it
+        locally and sends back the plaintext, and the server returns a signed certificate.
+        The plaintext nonce is never stored.
+      </p>
+
+      <p>
+        If the existing certificate is still valid for more than an hour,
+        <code>ssh login</code> skips the exchange and exits immediately - safe to run
+        in a shell profile or cron job.
+      </p>
+
+      <h3>Step 4 - Configure SSH client</h3>
+      <p>
+        Add the following to <code>~/.ssh/config</code> so SSH picks up the certificate
+        automatically:
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">~/.ssh/config</div>
+        <pre><code>Host *
+  IdentityFile ~/.config/dirless-connect/ssh/id_ed25519
+  CertificateFile ~/.config/dirless-connect/ssh/id_ed25519-cert.pub</code></pre>
+      </div>
+
+      <p>Then SSH into any enrolled host as usual:</p>
+
+      <div class="code-block">
+        <div class="code-label">Shell</div>
+        <pre><code>ssh alice@your-server.example.com</code></pre>
+      </div>
+
+      <div class="note">
+        <strong>Certificate TTL</strong> is configurable per account in the portal.
+        The default is 8 hours. Shorter TTLs increase security but require users to
+        run <code>dirless-connect ssh login</code> more frequently.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── Host Enforcement ── -->
+  <div class="feature-section" id="host-enforcement">
+    <div class="feature-header">
+      <span class="feature-badge">Feature</span>
+      <h2>Host-Based Access Control</h2>
+    </div>
+    <div class="feature-body">
+      <p>
+        By default, every user in your directory can resolve on every enrolled host.
+        Host-based access control lets you restrict which groups are allowed on which
+        hosts - so your database administrators don't appear as valid Linux users on
+        your web servers, and vice versa.
+      </p>
+      <p>
+        Enforcement happens locally on each host at sync time. A user not authorized
+        for a given host is simply absent from the local identity snapshot - they
+        cannot log in even if the control plane is unreachable.
+      </p>
+
+      <h3>How it works</h3>
+      <p>
+        You configure two things in the portal:
+      </p>
+
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>Setting</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Enable host enforcement</strong></td>
+            <td>Turns on group-based filtering. Without this flag, all host-group rules are ignored.</td>
+          </tr>
+          <tr>
+            <td><strong>Host-group rules</strong></td>
+            <td>A list of <code>group → hostname</code> pairs. A user must be a member of at least one authorized group to be present on that host.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        The agent receives these rules as part of its authorization config from the backend.
+        On each sync, it filters the identity snapshot using the host's own hostname
+        (<code>hostname</code> command output). Users not authorized for this host are
+        excluded from the local database - NSS lookups, <code>getent</code>, and SSH
+        authentication all see only the users that belong here.
+      </p>
+
+      <h3>Example</h3>
+      <p>
+        Suppose you have two groups - <code>backend-team</code> and <code>ops-team</code> -
+        and three hosts:
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">Host-group rules</div>
+        <pre><code>backend-team  →  backend-prod
+backend-team  →  backend-staging
+ops-team      →  bastion</code></pre>
+      </div>
+
+      <p>
+        With these rules active, a member of <code>backend-team</code> can log into
+        <code>backend-prod</code> and <code>backend-staging</code>, but does not exist as
+        a Linux user on <code>bastion</code> at all. A member of <code>ops-team</code>
+        can only log into <code>bastion</code>.
+      </p>
+
+      <div class="note">
+        <strong>Hostname matching is exact.</strong> The host's hostname must match the
+        rule string exactly - there is no wildcard or prefix matching. Set hostnames
+        intentionally when enrolling hosts if you plan to use this feature.
+      </div>
+
+      <div class="note">
+        <strong>Users not covered by any rule are excluded from all hosts</strong> when
+        enforcement is enabled. Make sure every active user belongs to at least one group
+        that has a rule, or they will be invisible system-wide.
+      </div>
+
+      <h3>Enabling host enforcement</h3>
+      <p>
+        Log into the <a href="https://portal.dirless.com">Dirless portal</a>, go to
+        <strong>Directory &rarr; Access Control</strong>, enable host enforcement, and
+        add your host-group rules. Changes propagate to all enrolled hosts within one
+        sync cycle (60 seconds by default).
+      </p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- What's next -->
+  <div class="next-steps">
+    <h2>What's next</h2>
+    <div class="next-cards">
+      <a href="/docs/" class="next-card">
+        <span class="next-card-title">Quickstart guide</span>
+        <span class="next-card-desc">Enroll your first host from scratch.</span>
+      </a>
+      <a href="/how-it-works.html" class="next-card">
+        <span class="next-card-title">How it works</span>
+        <span class="next-card-desc">The four components and how they fit together.</span>
+      </a>
+      <a href="/faq.html" class="next-card">
+        <span class="next-card-title">FAQ</span>
+        <span class="next-card-desc">Offline resilience, UID assignment, encryption, and more.</span>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-logo"><img src="/dirless.png" alt="Dirless" /></span>
+  <p>Linux identity management without LDAP, FreeIPA, or extra infrastructure.</p>
+  <div class="footer-links">
+    <a href="https://github.com/dirless">GitHub</a>
+    <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#100;&#105;&#114;&#108;&#101;&#115;&#115;&#46;&#99;&#111;&#109;">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
