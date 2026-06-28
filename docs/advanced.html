@@ -547,12 +547,28 @@ chmod +x /usr/local/bin/dirless-connect</code></pre>
         and three hosts:
       </p>
 
-      <div class="code-block">
-        <div class="code-label">Host-group rules</div>
-        <pre><code>backend-team  →  backend-prod
-backend-team  →  backend-staging
-ops-team      →  bastion</code></pre>
-      </div>
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Allowed on host</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>backend-team</code></td>
+            <td><code>backend-prod</code></td>
+          </tr>
+          <tr>
+            <td><code>backend-team</code></td>
+            <td><code>backend-staging</code></td>
+          </tr>
+          <tr>
+            <td><code>ops-team</code></td>
+            <td><code>bastion</code></td>
+          </tr>
+        </tbody>
+      </table>
 
       <p>
         With these rules active, a member of <code>backend-team</code> can log into
