@@ -457,7 +457,8 @@ chmod +x /usr/local/bin/dirless-connect</code></pre>
       <p>
         If the existing certificate is still valid for more than an hour,
         <code>ssh login</code> skips the exchange and exits immediately - safe to run
-        in a shell profile or cron job.
+        in a shell profile or cron job. How often a renewal is actually needed depends
+        on the certificate TTL, which is configurable per account in the portal.
       </p>
 
       <h3>Step 4 - Configure SSH client</h3>
