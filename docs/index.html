@@ -253,6 +253,20 @@
     }
     .note strong { color: var(--text); }
 
+    .arch-tabs { display: flex; gap: 0.4rem; margin: 0.75rem 0 0.6rem; }
+    .arch-tab {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.8rem;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .arch-tab.active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.08); }
+    .arch-tab:hover:not(.active) { color: var(--text-dim); }
+
     /* ── OPTIONAL SECTION ── */
     .optional-section {
       background: var(--surface);
@@ -437,9 +451,19 @@ dnf install -y dirless-cli dirless-agent</code></pre>
       also installs <code>libnss_dirless.so.2</code> and its systemd unit.</p>
 
       <div class="note">
-        <strong>Not on RHEL/AL2023?</strong> Download standalone binaries instead:<br><br>
-        <code>curl -fsSL https://github.com/dirless/dirless-cli/releases/latest/download/dirless-cli-x86_64 -o /usr/local/bin/dirless-cli &amp;&amp; chmod +x /usr/local/bin/dirless-cli</code><br><br>
-        <code>curl -fsSL https://github.com/dirless/dirless-agent/releases/latest/download/dirless-agent-x86_64 -o /usr/local/bin/dirless-agent &amp;&amp; chmod +x /usr/local/bin/dirless-agent</code>
+        <strong>Not on RHEL/AL2023?</strong> Download standalone binaries instead:
+        <div class="arch-tabs">
+          <button class="arch-tab active" onclick="switchArch('x86_64')">x86_64</button>
+          <button class="arch-tab" onclick="switchArch('aarch64')">aarch64</button>
+        </div>
+        <div id="arch-x86_64">
+          <code>curl -fsSL https://github.com/dirless/dirless-cli/releases/latest/download/dirless-cli-x86_64 -o /usr/local/bin/dirless-cli &amp;&amp; chmod +x /usr/local/bin/dirless-cli</code><br><br>
+          <code>curl -fsSL https://github.com/dirless/dirless-agent/releases/latest/download/dirless-agent-x86_64 -o /usr/local/bin/dirless-agent &amp;&amp; chmod +x /usr/local/bin/dirless-agent</code>
+        </div>
+        <div id="arch-aarch64" style="display:none">
+          <code>curl -fsSL https://github.com/dirless/dirless-cli/releases/latest/download/dirless-cli-aarch64 -o /usr/local/bin/dirless-cli &amp;&amp; chmod +x /usr/local/bin/dirless-cli</code><br><br>
+          <code>curl -fsSL https://github.com/dirless/dirless-agent/releases/latest/download/dirless-agent-aarch64 -o /usr/local/bin/dirless-agent &amp;&amp; chmod +x /usr/local/bin/dirless-agent</code>
+        </div>
       </div>
     </div>
   </div>
@@ -717,5 +741,14 @@ systemctl enable --now dirless-syncer</code></pre>
   </div>
 </footer>
 
+<script>
+function switchArch(arch) {
+  document.getElementById('arch-x86_64').style.display = arch === 'x86_64' ? '' : 'none';
+  document.getElementById('arch-aarch64').style.display = arch === 'aarch64' ? '' : 'none';
+  document.querySelectorAll('.arch-tab').forEach(function(t) {
+    t.classList.toggle('active', t.textContent === arch);
+  });
+}
+</script>
 </body>
 </html>
