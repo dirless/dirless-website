@@ -296,6 +296,21 @@
     .toc a { color: var(--text-dim); }
     .toc a:hover { color: var(--text); }
 
+    /* ── ARCH TABS ── */
+    .arch-tabs { display: flex; gap: 0.4rem; margin: 0.75rem 0 0.6rem; }
+    .arch-tab {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.8rem;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .arch-tab.active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.08); }
+    .arch-tab:hover:not(.active) { color: var(--text-dim); }
+
     /* ── NEXT STEPS ── */
     .next-steps { margin-top: 1rem; }
     .next-steps h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
@@ -408,18 +423,25 @@
         local machine (not on the servers).
       </p>
 
-      <div class="code-block">
-        <div class="code-label">Linux x86_64</div>
-        <pre><code>curl -Lo /usr/local/bin/dirless-connect \
+      <div class="arch-tabs">
+        <button class="arch-tab active" onclick="switchArch('x86_64')">x86_64</button>
+        <button class="arch-tab" onclick="switchArch('aarch64')">aarch64</button>
+      </div>
+      <div id="arch-x86_64">
+        <div class="code-block">
+          <div class="code-label">Shell</div>
+          <pre><code>curl -Lo /usr/local/bin/dirless-connect \
   https://github.com/dirless/dirless-connect/releases/latest/download/dirless-connect-x86_64
 chmod +x /usr/local/bin/dirless-connect</code></pre>
+        </div>
       </div>
-
-      <div class="code-block">
-        <div class="code-label">Linux aarch64</div>
-        <pre><code>curl -Lo /usr/local/bin/dirless-connect \
+      <div id="arch-aarch64" style="display:none">
+        <div class="code-block">
+          <div class="code-label">Shell</div>
+          <pre><code>curl -Lo /usr/local/bin/dirless-connect \
   https://github.com/dirless/dirless-connect/releases/latest/download/dirless-connect-aarch64
 chmod +x /usr/local/bin/dirless-connect</code></pre>
+        </div>
       </div>
 
       <h3>Step 2 - Register (one time per user)</h3>
@@ -618,5 +640,14 @@ ops-team      →  bastion</code></pre>
   </div>
 </footer>
 
+<script>
+function switchArch(arch) {
+  document.getElementById('arch-x86_64').style.display = arch === 'x86_64' ? '' : 'none';
+  document.getElementById('arch-aarch64').style.display = arch === 'aarch64' ? '' : 'none';
+  document.querySelectorAll('.arch-tab').forEach(function(t) {
+    t.classList.toggle('active', t.textContent === arch);
+  });
+}
+</script>
 </body>
 </html>
