@@ -393,30 +393,6 @@
         automatically, and the agent distributes it to every enrolled host.
       </p>
 
-      <h3>How it works</h3>
-      <div class="flow-diagram">
-<span class="hl">dirless-connect ssh register</span>   (once per user)<br>
-&nbsp; generates SSH + age keypairs locally<br>
-&nbsp; sends a magic link to the user's email<br>
-&nbsp; user clicks link → SSH public key stored in Dirless<br>
-<br>
-<span class="hl">dirless-connect ssh login</span>   (daily, or when cert expires)<br>
-&nbsp; Dirless encrypts a random nonce to the user's age public key<br>
-&nbsp; user decrypts it locally, proving key possession<br>
-&nbsp; Dirless signs an SSH certificate valid for the configured TTL (default 8 h)<br>
-&nbsp; certificate written to <span class="hl2">~/.config/dirless-connect/ssh/id_ed25519-cert.pub</span><br>
-<br>
-<span class="hl">ssh alice@hostname</span><br>
-&nbsp; sshd checks TrustedUserCAKeys (written by the agent on every enrolled host)<br>
-&nbsp; certificate validates → login succeeds, no authorized_keys lookup needed
-      </div>
-
-      <p>
-        The agent writes <code>/etc/ssh/dirless_ca.pub</code> and a
-        <code>TrustedUserCAKeys</code> drop-in to <code>/etc/ssh/sshd_config.d/dirless.conf</code>
-        automatically on each sync. No manual sshd configuration is needed on enrolled hosts.
-      </p>
-
       <h3>Step 1 - Install dirless-connect on the user's workstation</h3>
       <p>
         <code>dirless-connect</code> is the end-user CLI. Each user installs it once on their
@@ -534,7 +510,6 @@ chmod +x /usr/local/bin/dirless-connect</code></pre>
         cannot log in even if the control plane is unreachable.
       </p>
 
-      <h3>How it works</h3>
       <p>
         You configure two things in the portal:
       </p>
