@@ -658,7 +658,9 @@ getent passwd | grep -v nologin</code></pre>
     <p>
       If your team already uses AWS IAM Identity Center, the Dirless syncer
       pulls users, groups, and memberships automatically and pushes them to
-      your backend. Skip this if you're managing users through the portal only.
+      your backend. Portal-managed users and synced IAM Identity Center users
+      coexist - you can use both at the same time. Skip this section if you
+      don't have an IAM Identity Center directory to sync from.
     </p>
 
     <p>
