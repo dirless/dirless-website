@@ -577,36 +577,33 @@ dnf install -y dirless-cli dirless-agent</code></pre>
   <div class="step-section">
     <div class="step-header">
       <span class="step-num">Step 6</span>
-      <h2>Enable the NSS module</h2>
+      <h2>Wire up the NSS module (binary install only)</h2>
     </div>
     <div class="step-body">
       <p>
-        Edit <code>/etc/nsswitch.conf</code> and add <code>dirless</code> after
-        <code>files</code> on the <code>passwd</code>, <code>group</code>, and
-        <code>shadow</code> lines:
+        <strong>RPM install:</strong> skip this step. The package automatically updates
+        <code>/etc/nsswitch.conf</code> on install (backing up the original to
+        <code>/etc/nsswitch.conf.dirless-backup</code>) and restores it on removal.
+      </p>
+      <p>
+        <strong>Binary install:</strong> add <code>dirless</code> to the
+        <code>passwd</code>, <code>group</code>, and <code>shadow</code> lines in
+        <code>/etc/nsswitch.conf</code>:
       </p>
 
       <div class="code-block">
         <div class="code-label">/etc/nsswitch.conf (relevant lines)</div>
-        <pre><code>passwd:   files systemd dirless
-group:    files systemd dirless
-shadow:   files dirless</code></pre>
+        <pre><code>passwd:   files dirless systemd
+shadow:   files dirless
+group:    files dirless systemd</code></pre>
       </div>
 
       <p>
-        The <code>dirless</code> keyword maps to <code>libnss_dirless.so.2</code>,
-        which was installed by the <code>dirless-agent</code> package.
+        The <code>dirless</code> keyword maps to <code>libnss_dirless.so.2</code>.
         NSS lookups read from <code>local.db</code> directly - no network call,
         no daemon socket. If the backend is unreachable, lookups continue working
         from the last snapshot.
       </p>
-
-      <div class="note">
-        <strong>No restart needed.</strong> Changes to <code>nsswitch.conf</code>
-        take effect immediately for new processes. Running processes that already
-        cached their NSS configuration (like <code>sshd</code>) may need a reload
-        to pick up the new module.
-      </div>
     </div>
   </div>
 
